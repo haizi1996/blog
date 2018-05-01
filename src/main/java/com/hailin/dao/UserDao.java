@@ -64,4 +64,5 @@ public interface UserDao {
      */
     List<User> listUsersByUsernames(Collection<String> usernames);
 
+
 }

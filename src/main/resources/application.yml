@@ -35,3 +35,4 @@ spring:
     #useGlobalDataSourceStat: true
 mybatis:
   mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.hailin.model
