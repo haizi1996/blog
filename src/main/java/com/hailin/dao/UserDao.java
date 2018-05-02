@@ -14,7 +14,7 @@ public interface UserDao {
      * @param user
      * @return
      */
-    User saveUser(User user);
+    Long saveUser(User user);
 
     /**
      * 删除用户
@@ -28,7 +28,7 @@ public interface UserDao {
      * @param users
      * @return
      */
-    Integer removeUsersInBatch(List<User> users);
+    Integer removeUsersInBatch(List<Long> users);
 
     /**
      * 更新用户

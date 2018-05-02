@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -18,18 +19,21 @@ public class UserServiceImpl implements UserService{
     private UserDao userDao;
 
     @Override
-    public User saveUser(User user) {
-        return userDao.saveUser(user);
-    }
+    public Optional<User> saveUser(User user) {
 
-    @Override
-    public void removeUser(Long id) {
+        Long primarykey = userDao.saveUser(user);
+        return   Optional.ofNullable(primarykey > 0 ? userDao.getUserById(primarykey):null);
 
     }
 
     @Override
-    public void removeUsersInBatch(List<User> users) {
+    public Integer removeUser(Long id) {
+        return userDao.removeUser(id);
+    }
 
+    @Override
+    public Integer removeUsersInBatch(List<Long> ids) {
+        return userDao.removeUsersInBatch(ids);
     }
 
     @Override

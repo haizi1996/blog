@@ -6,6 +6,7 @@ import com.hailin.pagehelper.Pageable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     /**
@@ -13,21 +14,21 @@ public interface UserService {
      * @param user
      * @return
      */
-    User saveUser(User user);
+    Optional<User> saveUser(User user);
 
     /**
      * 删除用户
      * @param id
      * @return
      */
-    void removeUser(Long id);
+    Integer removeUser(Long id);
 
     /**
      * 删除列表里面的用户
-     * @param users
+     * @param ids
      * @return
      */
-    void removeUsersInBatch(List<User> users);
+    Integer removeUsersInBatch(List<Long> ids);
 
     /**
      * 更新用户
