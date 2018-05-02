@@ -4,11 +4,13 @@
   <resultMap id="BaseResultMap" type="com.winter.model.User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, username, password, email
+    id, name ,username, password, email , imageurl
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

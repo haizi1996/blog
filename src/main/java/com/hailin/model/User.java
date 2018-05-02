@@ -35,7 +35,7 @@ public class User implements UserDetails, Serializable {
 	@Size(max=100)
 	private String password; // 登录时密码
 
-	private String avatar; // 头像图片地址
+	private String imageUrl; // 头像图片地址
 
 	private List<Authority> authorities;
 
@@ -111,12 +111,12 @@ public class User implements UserDetails, Serializable {
 		this.password = encodePasswd;
 	}
 
-	public String getAvatar() {
-		return avatar;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class User implements UserDetails, Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("User[id=%d, username='%s', name='%s', email='%s', password='%s']", id, username, name, email,
-				password);
+		return String.format("User[id=%d, username='%s', name='%s', email='%s', password='%s' , imageUrl='%s']", id, username, name, email,
+				password,imageUrl);
 	}
 }
