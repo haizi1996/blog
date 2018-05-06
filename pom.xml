@@ -28,10 +28,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-security</artifactId>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -58,11 +58,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.security</groupId>-->
+			<!--<artifactId>spring-security-test</artifactId>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -71,11 +71,11 @@
 		</dependency>
 
 		<!-- 添加   Thymeleaf Spring Security 依赖，与 Thymeleaf 版本一致都是 3.x-->
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
-			<version>3.0.2.RELEASE</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.thymeleaf.extras</groupId>-->
+			<!--<artifactId>thymeleaf-extras-springsecurity4</artifactId>-->
+			<!--<version>3.0.2.RELEASE</version>-->
+		<!--</dependency>-->
 
 		<!-- 数据库连接池 -->
 		<dependency>
@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
-			<version>1.1.2</version>
+			<version>1.2.5</version>
 		</dependency>
 
 		<!-- jackson-->
@@ -115,12 +115,7 @@
 		</dependency>
 
 
-		<!-- 读取project文件 -->
-		<dependency>
-			<groupId>net.sf.mpxj</groupId>
-			<artifactId>mpxj</artifactId>
-			<version>7.1.0</version>
-		</dependency>
+
 
 
 

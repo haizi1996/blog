@@ -1,8 +1,7 @@
 package com.hailin.service;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.hailin.model.User;
-import com.hailin.pagehelper.Pageable;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,15 +47,15 @@ public interface UserService {
      * 获取用户列表
      * @return
      */
-    List<User> listUsers();
+    PageInfo<User> listUsers(Integer pageNum , Integer pageSize , int status);
 
     /**
      * 根据用户名进行分页模糊查询
      * @param name
-     * @param pageable
+     * @param status
      * @return
      */
-    Page<User> listUsersByNameLike(String name, Pageable pageable);
+    PageInfo<User> listUsersByNameLike(String name , Integer pageNum , Integer pageSize ,int status);
 
     /**
      * 更具名称列表查询

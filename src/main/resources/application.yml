@@ -4,7 +4,7 @@ spring:
   datasource:
     name: blog
     username: root
-    url: jdbc:mysql://localhost:3306/blog
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=UTF-8
     password: 123456
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
@@ -34,5 +34,13 @@ spring:
     # 合并多个DruidDataSource的监控数据
     #useGlobalDataSourceStat: true
 mybatis:
-  mapper-locations: classpath:mapping/*.xml
+  mapper-locations: classpath*:mapping/*.xml
   type-aliases-package: com.hailin.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#分页配置
+pagehelper:
+  helper-dialect: mysql
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true

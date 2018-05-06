@@ -1,13 +1,14 @@
 package com.hailin.dao;
 
-import com.github.pagehelper.Page;
 import com.hailin.model.User;
-import com.hailin.pagehelper.Pageable;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
+@Mapper
 public interface UserDao {
     /**
      * 保存用户
@@ -18,6 +19,7 @@ public interface UserDao {
 
     /**
      * 删除用户
+     * 逻辑删除
      * @param id
      * @return
      */
@@ -42,21 +44,14 @@ public interface UserDao {
      * @param id
      * @return
      */
-    User getUserById(Long id);
-
-    /**
-     * 获取用户列表
-     * @return
-     */
-    List<User> listUsers();
+    User getUserById(@Param("id") Long id);
 
     /**
      * 根据用户名进行分页模糊查询
      * @param name
-     * @param pageable
      * @return
      */
-    Page<User> listUsersByNameLike(String name, Pageable pageable);
+    List<User> listUsersByNameLike(@Param("name") String name , @Param("status") int status);
 
     /**
      * 根据名称列表查询
@@ -64,6 +59,14 @@ public interface UserDao {
      * @return
      */
     List<User> listUsersByUsernames(Collection<String> usernames);
+
+
+    /**
+     * 查找用户详情
+     * @param name
+     * @return
+     */
+//    UserDetails findByUsername(String name);
 
 
 }

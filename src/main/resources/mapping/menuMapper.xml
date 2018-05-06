@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.hailin.dao.MenuDao">
+
+    <sql id="base_item">
+        id , name , url , priority , status
+    </sql>
+
+    <select id="listAllMenu" resultType="menu" parameterType="java.lang.Integer">
+        select <include refid="base_item" /> FROM `menu`
+        <where>
+            <if test="status != null" >
+              AND status = #{status}
+            </if>
+        </where>
+        ORDER BY priority ;
+    </select>
+
+
+    <insert id="addMenu" parameterType="menu" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `menu` (name , url , priority) VALUES (#{name} , #{url} , #{priority});
+    </insert>
+
+    <update id="deleteMenuById" parameterType="java.lang.Integer">
+        UPDATE `menu` set status = 0 where id = #{id}
+    </update>
+
+
+    <update id="deleteMenuByPriority" parameterType="java.lang.Integer">
+        UPDATE `menu` SET status = 0 where priority = #{priority}
+    </update>
+
+
+</mapper>

@@ -7,17 +7,17 @@ import java.util.List;
 
 import javax.validation.constraints.Size;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * User 实体
  * 
  */
-public class User implements UserDetails, Serializable {
+public class User implements  Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,9 +37,11 @@ public class User implements UserDetails, Serializable {
 
 	private String imageUrl; // 头像图片地址
 
+	private int status;
+
 	private List<Authority> authorities;
 
-	protected User() {
+	public User() {
 	}
 
 	public User(String name, String email,String username,String password) {
@@ -73,43 +75,59 @@ public class User implements UserDetails, Serializable {
 		this.email = email;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		//  需将 List<Authority> 转成 List<SimpleGrantedAuthority>，否则前端拿不到角色列表名称
-		List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
-		for(GrantedAuthority authority : this.authorities){
-			simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
-		}
-		return simpleAuthorities;
+	public String getUsername() {
+		return username;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	//	@Override
+//	public Collection<? extends GrantedAuthority> getAuthorities() {
+//		//  需将 List<Authority> 转成 List<SimpleGrantedAuthority>，否则前端拿不到角色列表名称
+//		List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
+//		for(GrantedAuthority authority : this.authorities){
+//			simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+//		}
+//		return simpleAuthorities;
+//	}
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
 
-	@Override
-	public String getUsername() {
-		return username;
-	}
+//	@Override
+//	public String getUsername() {
+//		return username;
+//	}
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+//	@Override
+//	public String getPassword() {
+//		return password;
+//	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public void setEncodePassword(String password) {
-		PasswordEncoder  encoder = new BCryptPasswordEncoder();
-		String encodePasswd = encoder.encode(password);
-		this.password = encodePasswd;
-	}
+//	public void setEncodePassword(String password) {
+//		PasswordEncoder  encoder = new BCryptPasswordEncoder();
+//		String encodePasswd = encoder.encode(password);
+//		this.password = encodePasswd;
+//	}
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -119,25 +137,25 @@ public class User implements UserDetails, Serializable {
 		this.imageUrl = imageUrl;
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+//	@Override
+//	public boolean isAccountNonExpired() {
+//		return true;
+//	}
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+//	@Override
+//	public boolean isAccountNonLocked() {
+//		return true;
+//	}
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+//	@Override
+//	public boolean isCredentialsNonExpired() {
+//		return true;
+//	}
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+//	@Override
+//	public boolean isEnabled() {
+//		return true;
+//	}
 
 	@Override
 	public String toString() {

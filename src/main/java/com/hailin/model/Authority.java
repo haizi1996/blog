@@ -1,13 +1,14 @@
 package com.hailin.model;
 
 
-import org.springframework.security.core.GrantedAuthority;
+
+//import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 权限.
  * 
  */
-public class Authority implements GrantedAuthority {
+public class Authority  {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +29,7 @@ public class Authority implements GrantedAuthority {
 	 * 
 	 * @see org.springframework.security.core.GrantedAuthority#getAuthority()
 	 */
-	@Override
+//	@Override
 	public String getAuthority() {
 		return name;
 	}
