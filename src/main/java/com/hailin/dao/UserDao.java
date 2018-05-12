@@ -62,11 +62,12 @@ public interface UserDao {
 
 
     /**
-     * 查找用户详情
-     * @param name
+     * 查找用户
+     * @param userName
+     * @param status
      * @return
      */
-//    UserDetails findByUsername(String name);
+    User findByUsername(@Param("userName") String userName , @Param("status") int status);
 
 
 }

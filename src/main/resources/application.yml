@@ -33,6 +33,15 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     # 合并多个DruidDataSource的监控数据
     #useGlobalDataSourceStat: true
+
+
+    ## THYMELEAF
+  thymeleaf:
+    encoding: utf-8
+     # 热部署静态文件
+    cache: false
+     # 使用HTML5标准
+    mode: HTML5
 mybatis:
   mapper-locations: classpath*:mapping/*.xml
   type-aliases-package: com.hailin.model
@@ -44,3 +53,4 @@ pagehelper:
   params: count=countSql
   reasonable: true
   support-methods-arguments: true
+

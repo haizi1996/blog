@@ -2,7 +2,7 @@ package com.hailin.dto;
 
 public class Response <T>{
 
-    //0代表成功返回
+    //1代表成功返回
     private int code ;
 
     private String errorMessage;
@@ -44,10 +44,10 @@ public class Response <T>{
     }
 
     public static<T> Response successResponse (T t){
-        return new Response(0 , t);
+        return new Response(1 , t);
     }
 
     public static <T> Response errorResponse(String erroeMessage){
-        return new Response(-1 , erroeMessage);
+        return new Response(1 , erroeMessage);
     }
 }

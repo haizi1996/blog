@@ -2,13 +2,16 @@ package com.hailin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.hailin.dao.AuthorityDao;
 import com.hailin.dao.UserDao;
+import com.hailin.model.Authority;
 import com.hailin.model.User;
 import com.hailin.service.UserService;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -21,10 +24,20 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
 
+    @Resource
+    private AuthorityDao authorityDao;
+
     @Override
+    @Transactional
     public Optional<User> saveUser(User user) {
+
+        User user1 = null;
         Long primarykey = userDao.saveUser(user);
-        return   Optional.ofNullable(primarykey > 0 ? userDao.getUserById(primarykey):null);
+        if(primarykey > 0){
+//            authorityDao.addAuthority(new Authority(user.getUsername() , a))
+        }
+
+        return   Optional.ofNullable(user1);
 
     }
 
@@ -67,7 +80,12 @@ public class UserServiceImpl implements UserService {
         return userDao.listUsersByUsernames(usernames);
     }
 
-//    @Override
+    @Override
+    public User getUserByUserName(String userName , int status) {
+        return userDao.findByUsername(userName , status);
+    }
+
+    //    @Override
 //    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 //        return userDao.findByUsername(s);
 //    }

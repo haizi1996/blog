@@ -17,6 +17,7 @@ $(function() {
 		 $.ajax({ 
 			 url: url, 
 			 success: function(data){
+			 	alert(data);
 				 $("#rightContainer").html(data);
 		 },
 		 error : function() {

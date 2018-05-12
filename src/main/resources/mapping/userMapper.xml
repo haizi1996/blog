@@ -73,6 +73,17 @@
       #{username}
     </foreach>
   </select>
+  <select id="findByUsername" parameterType="java.lang.String" resultType="user">
+    SELECT <include refid="Base_Column_List"/> FROM `user`
+    <where>
+      <if test="userName != null and userName.length()>0">
+        AND username=#{userName}
+      </if>
+      <if test="status != null">
+        AND status = #{status}
+      </if>
+    </where>
+  </select>
 
 
 </mapper>

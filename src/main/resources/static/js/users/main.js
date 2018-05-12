@@ -15,7 +15,7 @@ $(function() {
 	// 根据用户名、页面索引、页面大小获取用户列表
 	function getUersByName(pageIndex, pageSize) {
 		 $.ajax({ 
-			 url: "/users", 
+			 url: "/users/list",
 			 contentType : 'application/json',
 			 data:{
 				 "async":true, 

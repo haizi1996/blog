@@ -43,6 +43,14 @@ public interface UserService {
      */
     User getUserById(Long id);
 
+
+    /**
+     * 根据用户名查询
+     * @param userName
+     * @return
+     */
+    User getUserByUserName(String userName , int status);
+
     /**
      * 获取用户列表
      * @return
@@ -58,9 +66,9 @@ public interface UserService {
     PageInfo<User> listUsersByNameLike(String name , Integer pageNum , Integer pageSize ,int status);
 
     /**
-     * 更具名称列表查询
+     * 根据名称列表查询
      * @param usernames
      * @return
      */
-    List<User> listUsersByUsernames(Collection<String> usernames);
+    List<User> listUsersByUsernames(Collection<String> usernames );
 }

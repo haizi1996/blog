@@ -3,10 +3,13 @@ package com.hailin.service.impl;
 import com.hailin.dao.MenuDao;
 import com.hailin.model.Menu;
 import com.hailin.service.MenuService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+
+@Service
 public class MenuServiceImpl implements MenuService{
 
     @Resource
