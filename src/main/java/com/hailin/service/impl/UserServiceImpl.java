@@ -4,12 +4,15 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hailin.dao.AuthorityDao;
 import com.hailin.dao.UserDao;
-import com.hailin.model.Authority;
+import com.hailin.dao.RoleUserDao;
+import com.hailin.model.RoleUser;
 import com.hailin.model.User;
 import com.hailin.service.UserService;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService  {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Resource
     private UserDao userDao;
@@ -27,14 +33,18 @@ public class UserServiceImpl implements UserService {
     @Resource
     private AuthorityDao authorityDao;
 
+    @Resource
+    private RoleUserDao roleUserDao;
+
     @Override
     @Transactional
     public Optional<User> saveUser(User user) {
-
         User user1 = null;
         Long primarykey = userDao.saveUser(user);
         if(primarykey > 0){
-//            authorityDao.addAuthority(new Authority(user.getUsername() , a))
+            RoleUser roleUser = RoleUser.createBolgerRole(user.getId());
+            roleUserDao.addUserRole(roleUser);
+            user1 = userDao.getUserById(user.getId());
         }
 
         return   Optional.ofNullable(user1);
@@ -42,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer removeUser(Long id) {
+    public Integer removeUser(Integer id) {
         return userDao.removeUser(id);
     }
 
@@ -58,19 +68,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(Integer id) {
         return userDao.getUserById(id);
     }
 
     @Override
     public PageInfo<User> listUsers( Integer pageNum , Integer pageSize , int status) {
-        return listUsersByNameLike(null , pageNum , pageSize , status);
+        return listUserAndRolesByNameLike(null , pageNum , pageSize , status);
     }
 
     @Override
-    public PageInfo<User> listUsersByNameLike(String name, Integer pageNum , Integer pageSize , int status) {
+    public PageInfo<User> listUserAndRolesByNameLike(String name, Integer pageNum , Integer pageSize , int status) {
         PageHelper.startPage(pageNum,pageSize);
-        List<User> users = userDao.listUsersByNameLike(name , status);
+        List<User> users = userDao.listUserAndRolesByNameLike(name , status);
         PageInfo<User> pageInfo = new PageInfo<>(users);
         return pageInfo;
     }
@@ -81,12 +91,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUserName(String userName , int status) {
+    public User getUserByUserName(String userName , Integer status) {
         return userDao.findByUsername(userName , status);
     }
 
-    //    @Override
-//    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-//        return userDao.findByUsername(s);
-//    }
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+
+        logger.info("登录用户名:{}",userName);
+        return userDao.findByUsername(userName,null);
+    }
 }

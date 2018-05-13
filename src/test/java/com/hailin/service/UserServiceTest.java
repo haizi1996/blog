@@ -5,6 +5,8 @@ import com.hailin.BlogApplicationTests;
 import com.hailin.model.User;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.annotation.Resource;
 import java.util.logging.Logger;
@@ -45,14 +47,14 @@ public class UserServiceTest extends BlogApplicationTests{
 
     @Test
     public void listUsersByNameLike() {
-        PageInfo<User> userPageInfo = userService.listUsersByNameLike("张" , 3 , 2 , 1);
+        PageInfo<User> userPageInfo = userService.listUserAndRolesByNameLike("张" , 3 , 2 , 1);
         logger.info("userPageInfo = {}" ,userPageInfo.toString());
 
     }
 
     @Test
-    public void listUsersByUsernames() {
-
-
+    public void listUsersByUsername() {
+        UserDetails userDetails = userService.loadUserByUsername("zhangsan");
+        System.out.printf(userDetails.toString());
     }
 }

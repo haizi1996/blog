@@ -15,7 +15,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     private AuthorityDao authorityDao;
 
     @Override
-    public Authority getAuthorityById(Long id , int status) {
+    public Authority getAuthorityById(Integer id , int status) {
         return authorityDao.findOneById(id , status);
     }
 

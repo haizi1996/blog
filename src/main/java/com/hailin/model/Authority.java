@@ -12,7 +12,7 @@ public class Authority implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Integer id;
 
 	private String userName; // 用户的唯一标识
 
@@ -20,11 +20,16 @@ public class Authority implements GrantedAuthority {
 
 	private int status ;//1代表可使用
 
-	public Long getId() {
+	public String getName() {
+		return name;
+	}
+
+	public Integer getId() {
+
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

@@ -44,16 +44,16 @@ public class UserDaoTest extends BlogApplicationTests {
 
     @Test
     public void getUserById() {
-        User user = userDao.getUserById(1l);
+        User user = userDao.getUserById(1);
         logger.info(user.toString());
     }
 
 
 
     @Test
-    public void listUsersByNameLike() {
+    public void listUserAndRolesByNameLike() {
         String name = "张";
-        List<User> users = userDao.listUsersByNameLike(name ,  1);
+        List<User> users = userDao.listUserAndRolesByNameLike(name ,  1);
         users.stream().forEach(user -> logger.info(user.toString()));
 
 

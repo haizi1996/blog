@@ -13,6 +13,8 @@ create table `user`(
   operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
   create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
   operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
+  last_login_time DATETIME NOT NULL DEFAULT now() COMMENT '最后一次登录时间',
+  last_modify_password_Time DATETIME NOT NULL DEFAULT now() COMMENT '密码最后修改时间',
   operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip'
 
 )ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '用户表';
@@ -54,17 +56,17 @@ CREATE TABLE `userGroup`(
 
 
 CREATE TABLE `ACLModule`(
-id INT AUTO_INCREMENT PRIMARY KEY ,
-name VARCHAR(20) UNIQUE NOT NULL COMMENT '权限名',
-parent_Id INT NOT NULL DEFAULT 0 COMMENT '上层权限模块ID',
-level TINYINT NOT NULL DEFAULT 1 COMMENT '层级',
-seq TINYINT NOT NULL DEFAULT 1 COMMENT '相同层级排序关键字',
-remark VARCHAR(200) DEFAULT '' COMMENT '备注',
-operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
-create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
-operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
-operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
-status TINYINT NOT NULL DEFAULT 1 COMMENT '状态'
+  id INT AUTO_INCREMENT PRIMARY KEY ,
+  name VARCHAR(20) UNIQUE NOT NULL COMMENT '权限名',
+  parent_Id INT NOT NULL DEFAULT 0 COMMENT '上层权限模块ID',
+  level TINYINT NOT NULL DEFAULT 1 COMMENT '层级',
+  seq TINYINT NOT NULL DEFAULT 1 COMMENT '相同层级排序关键字',
+  remark VARCHAR(200) DEFAULT '' COMMENT '备注',
+  operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
+  operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
+  operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态'
 )ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '权限模块表';
 
 
@@ -106,13 +108,15 @@ CREATE TABLE `role_user`(
   id INT PRIMARY KEY AUTO_INCREMENT ,
   role_id INT NOT NULL DEFAULT 1 COMMENT '角色ID',
   user_id INT NOT NULL DEFAULT 1 COMMENT '用户Id',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态 1:正常',
   operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
   create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
   operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
   operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip'
 )ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '角色用户表';
 
-
+insert into `role_user` (user_id , role_id) values (1,1),(2,1),(3,1),(4,1),(5,1);
+insert into `role_user` (user_id , role_id) values (13,1),(14,1);
 
 CREATE TABLE `role_ACl`(
   id INT PRIMARY KEY AUTO_INCREMENT ,

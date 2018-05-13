@@ -46,11 +46,17 @@ mybatis:
   mapper-locations: classpath*:mapping/*.xml
   type-aliases-package: com.hailin.model
   configuration:
+    #输出SQL语句日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #驼峰命名
+    map-underscore-to-camel-case: true
 #分页配置
 pagehelper:
   helper-dialect: mysql
   params: count=countSql
   reasonable: true
   support-methods-arguments: true
+
+
+
 

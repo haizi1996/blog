@@ -23,7 +23,7 @@ public interface UserDao {
      * @param id
      * @return
      */
-    Integer removeUser(@Param("id") Long id);
+    Integer removeUser(@Param("id") Integer id);
 
     /**
      * 删除列表里面的用户
@@ -44,14 +44,14 @@ public interface UserDao {
      * @param id
      * @return
      */
-    User getUserById(@Param("id") Long id);
+    User getUserById(@Param("id") Integer id);
 
     /**
      * 根据用户名进行分页模糊查询
      * @param name
      * @return
      */
-    List<User> listUsersByNameLike(@Param("name") String name , @Param("status") int status);
+    List<User> listUserAndRolesByNameLike(@Param("name") String name , @Param("status") int status);
 
     /**
      * 根据名称列表查询
@@ -61,13 +61,15 @@ public interface UserDao {
     List<User> listUsersByUsernames(Collection<String> usernames);
 
 
+
+
     /**
      * 查找用户
      * @param userName
      * @param status
      * @return
      */
-    User findByUsername(@Param("userName") String userName , @Param("status") int status);
+    User findByUsername(@Param("userName") String userName , @Param("status") Integer status);
 
 
 }

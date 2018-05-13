@@ -2,12 +2,13 @@ package com.hailin.service;
 
 import com.github.pagehelper.PageInfo;
 import com.hailin.model.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     /**
      * 保存用户
      * @param user
@@ -20,7 +21,7 @@ public interface UserService {
      * @param id
      * @return
      */
-    Integer removeUser(Long id);
+    Integer removeUser(Integer id);
 
     /**
      * 删除列表里面的用户
@@ -41,7 +42,7 @@ public interface UserService {
      * @param id
      * @return
      */
-    User getUserById(Long id);
+    User getUserById(Integer id);
 
 
     /**
@@ -49,7 +50,7 @@ public interface UserService {
      * @param userName
      * @return
      */
-    User getUserByUserName(String userName , int status);
+    User getUserByUserName(String userName , Integer status);
 
     /**
      * 获取用户列表
@@ -63,7 +64,7 @@ public interface UserService {
      * @param status
      * @return
      */
-    PageInfo<User> listUsersByNameLike(String name , Integer pageNum , Integer pageSize ,int status);
+    PageInfo<User> listUserAndRolesByNameLike(String name , Integer pageNum , Integer pageSize ,int status);
 
     /**
      * 根据名称列表查询

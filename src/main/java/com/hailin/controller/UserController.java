@@ -39,7 +39,7 @@ public class UserController {
                             @RequestParam(value = "status" , required = false ,defaultValue = "1") int status,
                             Model model
     ){
-        PageInfo<User> pageInfo = userService.listUsersByNameLike(name , pageIndex ,pageSize , status);
+        PageInfo<User> pageInfo = userService.listUserAndRolesByNameLike(name , pageIndex ,pageSize , status);
         Response response = pageInfo != null ? Response.successResponse(pageInfo) : Response.errorResponse("");
         model.addAttribute("listUserResponse" , response);
         ModelAndView modelAndView = new ModelAndView(async ?"users/list :: #mainContainer" :"users/list","userModel", model);
@@ -50,13 +50,13 @@ public class UserController {
 
     @RequestMapping("/delete/{id}")
     @ResponseBody
-    public Response deleteUser(@PathVariable("id") Long id ){
+    public Response deleteUser(@PathVariable("id") Integer id ){
         Integer rows = userService.removeUser(id);
         return rows > 0 ? Response.successResponse("删除用户成功"): Response.errorResponse("删除用户失败");
     }
 
     @GetMapping("/editForm/{id}")
-    public String modifyForm(@PathVariable("id") Long id , Model model){
+    public String modifyForm(@PathVariable("id") Integer id , Model model){
         User user = userService.getUserById(id);
         model.addAttribute("user" , user);
         return "edit";
@@ -73,11 +73,9 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveOrUpdateUser(User user , @RequestParam(value = "AuthorityId" , required = true) Long authorityId){
+    public String saveOrUpdateUser(User user , @RequestParam(value = "AuthorityId" , required = true) Integer authorityId){
         Optional<User> optionalUser = userService.saveUser(user);
-        List<Authority> authorities = Lists.newArrayList(authorityService.getAuthorityById(authorityId , AuthorityEmun.AuthorityID.ROLE_USER_AUTHORITY_ID.getCode()));
         if(optionalUser.isPresent()){
-            optionalUser.get().setAuthorities(authorities);
         }
 
         return null;

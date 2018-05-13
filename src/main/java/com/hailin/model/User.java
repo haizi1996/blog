@@ -1,6 +1,7 @@
 package com.hailin.model;
 
 import com.google.common.collect.Lists;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.Size;
@@ -21,25 +23,62 @@ public class User implements  Serializable,UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id; // 用户的唯一标识
+	/**
+	 * 用户的唯一标识
+	 */
+	private Integer id;
 
+	/**
+	 * 姓名
+	 */
 	@Size(min=2, max=20)
 	private String name;
 
+	//邮箱
 	@Size(max=50)
 	private String email;
 
+	//用户名 用户账号，用户登录时的唯一标识
 	@Size(min=3, max=20)
-	private String username; // 用户账号，用户登录时的唯一标识
+	private String username;
 
+	// 登录时密码
 	@Size(max=100)
-	private String password; // 登录时密码
+	private String password;
 
-	private String imageUrl; // 头像图片地址
+	// 登录时密码
+	private String imageUrl;
 
+	//用户状态,1:正常状态 , 0代表冻结状态，2代表删除
 	private int status;
 
-	private List<Authority> authorities;//用户的权限 一对多
+	//备注
+	private String remark ;
+	//用户组
+	private Integer userGroupId ;
+
+	//最后操作者  也是user表的主键
+	private Date operator ;
+	//创建时间
+	private Date createTime ;
+
+	//最后操作时间
+	private Date operateTime ;
+
+	//最后登录时间
+	private Date lastLoginTime ;
+
+	//密码最后修改时间
+	private Date lastModifyPasswordTime ;
+
+	//最后操作的IP地址
+	private String operateIp;
+
+	//用户的权限 一对多
+	private List<Authority> authorities;
+
+	//角色
+	private List<Role> roles ;
 
 	public User() {
 	}
@@ -68,11 +107,11 @@ public class User implements  Serializable,UserDetails {
 		this.password = password;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -102,6 +141,14 @@ public class User implements  Serializable,UserDetails {
 	}
 
 
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
@@ -127,15 +174,31 @@ public class User implements  Serializable,UserDetails {
 	}
 
 
-
 	@Override
 	public String toString() {
-		return String.format("User[id=%d, username='%s', name='%s', email='%s', password='%s' , imageUrl='%s']", id, username, name, email,
-				password,imageUrl);
+		return "User{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", email='" + email + '\'' +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", imageUrl='" + imageUrl + '\'' +
+				", status=" + status +
+				", remark='" + remark + '\'' +
+				", userGroupId=" + userGroupId +
+				", operator='" + operator + '\'' +
+				", createTime=" + createTime +
+				", operateTime=" + operateTime +
+				", lastLoginTime=" + lastLoginTime +
+				", lastModifyPasswordTime=" + lastModifyPasswordTime +
+				", operateIp='" + operateIp + '\'' +
+				", authorities=" + authorities +
+				", roles=" + roles +
+				'}';
 	}
 
 	/**
-	 * 账号是否未过期
+	 * 登录账号是否未过期
 	 * @return
 	 */
 	@Override
@@ -144,7 +207,7 @@ public class User implements  Serializable,UserDetails {
 	}
 
 	/**
-	 * 账号是否未冻住
+	 * 账号是否未冻住  可以恢复
 	 * @return
 	 */
 	@Override
@@ -153,7 +216,7 @@ public class User implements  Serializable,UserDetails {
 	}
 
 	/**
-	 * 验证账号是否可用
+	 * 登录密码过期，比如30天修改一次
 	 * @return
 	 */
 	@Override
@@ -162,7 +225,7 @@ public class User implements  Serializable,UserDetails {
 	}
 
 	/**
-	 * 账号是否可使用
+	 * 账号是否可使用 一般是不能恢复的
 	 * @return
 	 */
 	@Override
@@ -170,5 +233,67 @@ public class User implements  Serializable,UserDetails {
 		return true;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
 
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Integer getUserGroupId() {
+		return userGroupId;
+	}
+
+	public void setUserGroupId(Integer userGroupId) {
+		this.userGroupId = userGroupId;
+	}
+
+	public Date getOperator() {
+		return operator;
+	}
+
+	public void setOperator(Date operator) {
+		this.operator = operator;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getOperateTime() {
+		return operateTime;
+	}
+
+	public void setOperateTime(Date operateTime) {
+		this.operateTime = operateTime;
+	}
+
+	public Date getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+
+	public Date getLastModifyPasswordTime() {
+		return lastModifyPasswordTime;
+	}
+
+	public void setLastModifyPasswordTime(Date lastModifyPasswordTime) {
+		this.lastModifyPasswordTime = lastModifyPasswordTime;
+	}
+
+	public String getOperateIp() {
+		return operateIp;
+	}
+
+	public void setOperateIp(String operateIp) {
+		this.operateIp = operateIp;
+	}
 }

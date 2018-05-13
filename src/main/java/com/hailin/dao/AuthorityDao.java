@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface AuthorityDao {
 
-    Authority findOneById(@Param("id") Long id , @Param("status") int status);
+    Authority findOneById(@Param("id") Integer id , @Param("status") int status);
 
     Authority findAuthorityByUserName(@Param("userName") String userName, @Param("status") int status);
 
