@@ -42,9 +42,13 @@ spring:
     cache: false
      # 使用HTML5标准
     mode: HTML5
+    #mongoDB
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
 mybatis:
   mapper-locations: classpath*:mapping/*.xml
-  type-aliases-package: com.hailin.model
+  type-aliases-package: com.hailin.blog.model
   configuration:
     #输出SQL语句日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -56,6 +60,8 @@ pagehelper:
   params: count=countSql
   reasonable: true
   support-methods-arguments: true
+
+  # 文件上传的限制
 
 
 

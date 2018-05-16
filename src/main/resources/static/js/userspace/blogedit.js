@@ -48,7 +48,7 @@ $(function() {
  
 	         }
 		}).done(function(res) {
-			$('#file').val('');
+			$('#fileServer').val('');
 		}).fail(function(res) {});
  	})
  

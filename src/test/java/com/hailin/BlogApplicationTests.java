@@ -1,6 +1,5 @@
 package com.hailin;
 
-import com.hailin.dao.UserDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

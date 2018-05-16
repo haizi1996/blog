@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hailin.dao.UserDao" >
-  <resultMap id="BaseResultMap" type="com.hailin.model.User" >
+<mapper namespace="com.hailin.blog.dao.UserDao" >
+  <resultMap id="BaseResultMap" type="com.hailin.blog.model.User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -10,7 +10,7 @@
     <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR" />
   </resultMap>
 
-  <resultMap id="queryResultMap" type="com.hailin.model.User" >
+  <resultMap id="queryResultMap" type="com.hailin.blog.model.User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     <result column="last_modify_password_Time" property="lastModifyPasswordTime" jdbcType="TIMESTAMP" />
     <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
-    <collection property="roles" ofType="com.hailin.model.Role" >
+    <collection property="roles" ofType="com.hailin.blog.model.Role" >
       <id column="id" property="id"  jdbcType="INTEGER"/>
       <result column="role_name" property="name" jdbcType="VARCHAR" />
       <result column="role_type" property="type" jdbcType="INTEGER" />
@@ -49,12 +49,12 @@
   <sql id="user_Column_List">
     `user`.id, `user`.name , `user`.username, `user`.password, `user`.email , `user`.imageurl , `user`.status , `user`.remark , `user`.userGroup_Id , `user`.operator , `user`.create_Time, `user`.operate_Time , `user`.last_Login_Time , `user`.last_Modify_Password_Time , `user`.operate_Ip
   </sql>
-  <sql id="role_colum_List">
+  <sql id="role_column_List">
     role.id role_id , role.`name` role_name  , role.`type` role_type , role.`status` role_status , role.`seq` role_seq ,  role.`create_time` role_create , role.`operate_time`  role_operate_time , role.`operate_ip` role_operate_ip ,role.`remark` role_mark , role.`operator` role_opterator
   </sql>
 
   <select id="listUserAndRolesByNameLike" parameterType="java.lang.String" resultMap="queryResultMap">
-      SELECT <include refid="user_Column_List" /> , <include refid="role_colum_List" />   FROM `user`
+      SELECT <include refid="user_Column_List" /> , <include refid="role_column_List" />   FROM `user`
     LEFT JOIN `role_user` ON `user`.id = `role_user`.user_id
     LEFT JOIN `role` ON `role_user`.role_id = `role`.id
     <where>
@@ -83,21 +83,35 @@
            name=#{name} ,
          </if>
          <if test="password != null">
-           password = #{password} ,
+           password = #{password} ,last_modify_password_Time = now(),
          </if>
          <if test="email != null">
            email = #{email} ,
          </if>
-         <if test=" imageUrl != null">
-           imageUrl = #{imageUrl}
+         <if test="imageUrl != null">
+           imageUrl = #{imageUrl} ,
          </if>
+         <if test="remark != null">
+           remark = #{remark},
+         </if>
+         <if test="operator != null">
+           operator = #{operator},
+         </if>
+         <if test="operateIp != null">
+           operate_ip = #{operateIp},
+         </if>
+         <if test="userGroupId != null">
+           userGroup_Id = #{userGroupId},
+         </if>
+         operate_time = now()
        </set>
+
     WHERE id = #{id}
   </update>
 
-  <select id="getUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getUserById" resultMap="queryResultMap" parameterType="java.lang.Integer" >
     select 
-    <include refid="Base_Column_List" />
+    <include refid="user_Column_List" />
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -123,6 +137,19 @@
       </if>
       <if test="status != null">
         AND status = #{status}
+      </if>
+    </where>
+  </select>
+  <select id="findUserDetailsByUsername" resultMap="queryResultMap" resultType="user" >
+    SELECT <include refid="user_Column_List" /> , <include refid="role_column_List" />   FROM `user`
+    LEFT JOIN `role_user` ON `user`.id = `role_user`.user_id
+    LEFT JOIN `role` ON `role_user`.role_id = `role`.id
+    <where>
+      <if test="userName != null and userName.length()>0">
+        AND `user`.`username` =  #{userName}
+      </if>
+      <if test="status != null">
+        AND `user`.status = #{status}
       </if>
     </where>
   </select>
