@@ -18,15 +18,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileServiceImpl implements FileService {
 	
-	@Autowired
-	public FileRepository fileRepository;
+//	@Autowired
+//	public FileRepository fileRepository;
 
 	/* (non-Javadoc)
 	 * @see com.waylau.spring.boot.fileserver.service.FileService#saveFile(com.waylau.spring.boot.fileserver.domain.File)
 	 */
 	@Override
 	public File saveFile(File file) {
-		return fileRepository.save(file);
+//		return fileRepository.save(file);
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -34,7 +35,7 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public void removeFile(String id) {
-		fileRepository.deleteById(id);
+//		fileRepository.deleteById(id);
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +43,8 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public Optional<File> getFileById(String id) {
-		return fileRepository.findById(id);
+//		return fileRepository.findById(id);
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -50,7 +52,9 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public List<File> listFiles() {
-		return fileRepository.findAll();
+//		return fileRepository.findAll();
+		return null;
 	}
+
 
 }

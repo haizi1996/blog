@@ -3,16 +3,12 @@ package com.hailin.blog.service;
 import com.hailin.blog.model.Blog;
 import com.hailin.blog.model.Catalog;
 import com.hailin.blog.model.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 /**
  * Blog 服务接口.
  * 
- * @since 1.0.0 2017年4月7日
- * @author <a href="https://waylau.com">Way Lau</a>
  */
 public interface BlogService {
 	/**
@@ -48,15 +44,14 @@ public interface BlogService {
 	 * @param user
 	 * @return
 	 */
-	Page<Blog> listBlogsByTitleVoteAndSort(User user, String title);
-	
+	List<Blog> listBlogsByTitleVoteAndSort(User user, String title);
+
 	/**
 	 * 根据分类进行查询
 	 * @param catalog
-	 * @param pageable
 	 * @return
 	 */
-	Page<Blog> listBlogsByCatalog(Catalog catalog, Pageable pageable);
+    List<Blog> listBlogsByCatalog(Catalog catalog);
 	/**
 	 * 阅读量递增
 	 * @param id
