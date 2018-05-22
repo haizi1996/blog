@@ -2,6 +2,7 @@ package com.hailin.blog.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.Size;
@@ -31,7 +32,7 @@ public class Blog implements Serializable {
  	
 	private User user;
 	
-	private Timestamp createTime;
+	private Date createTime;
 
 	private Integer readSize = 0; // 访问量、阅读量
 	 
@@ -87,7 +88,7 @@ public class Blog implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
-//		this.htmlContent = Processor.process(content);
+//		this.htmlContent = Processor.process(constant);
 	}
 	public User getUser() {
 		return user;
@@ -95,11 +96,19 @@ public class Blog implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
- 
-	public Timestamp getCreateTime() {
+
+	public void setHtmlContent(String htmlContent) {
+		this.htmlContent = htmlContent;
+	}
+
+	public Date getCreateTime() {
 		return createTime;
 	}
-	
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
 	public String getHtmlContent() {
 		return htmlContent;
 	}

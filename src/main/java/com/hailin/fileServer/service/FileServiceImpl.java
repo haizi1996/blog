@@ -8,6 +8,7 @@ import com.hailin.fileServer.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 
 /**
  * File 服务.
@@ -18,16 +19,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileServiceImpl implements FileService {
 	
-//	@Autowired
-//	public FileRepository fileRepository;
+	@Resource
+	public FileRepository fileRepository;
 
 	/* (non-Javadoc)
 	 * @see com.waylau.spring.boot.fileserver.service.FileService#saveFile(com.waylau.spring.boot.fileserver.domain.File)
 	 */
 	@Override
 	public File saveFile(File file) {
-//		return fileRepository.save(file);
-		return null;
+		return fileRepository.save(file);
 	}
 
 	/* (non-Javadoc)
@@ -35,7 +35,7 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public void removeFile(String id) {
-//		fileRepository.deleteById(id);
+		fileRepository.deleteById(id);
 	}
 
 	/* (non-Javadoc)
@@ -43,8 +43,7 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public Optional<File> getFileById(String id) {
-//		return fileRepository.findById(id);
-		return null;
+		return fileRepository.findById(id);
 	}
 
 	/* (non-Javadoc)
@@ -52,9 +51,11 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public List<File> listFiles() {
-//		return fileRepository.findAll();
-		return null;
+		return fileRepository.findAll();
 	}
 
-
+	@Override
+	public void deleteById(String id) {
+		 fileRepository.deleteById(id);
+	}
 }

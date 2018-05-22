@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hailin.blog.dao.CatalogDao" >
+  <resultMap id="BaseResultMap" type="com.hailin.blog.model.Catalog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="password" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="queryResultMap" type="com.hailin.blog.model.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="password" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
+    <association property="user" javaType="com.hailin.blog.model.User" >
+      <id column="user_id" property="id" jdbcType="INTEGER" />
+      <result column="user_username" property="username" jdbcType="VARCHAR" />
+      <result column="user_name" property="name" jdbcType="VARCHAR" />
+      <result column="user_password" property="password" jdbcType="VARCHAR" />
+      <result column="user_email" property="email" jdbcType="VARCHAR" />
+      <result column="user_imageUrl" property="imageUrl" jdbcType="VARCHAR" />
+      <result column="user_remark" property="remark" jdbcType="VARCHAR" />
+      <result column="user_status" property="status" jdbcType="INTEGER" />
+      <result column="user_userGroup_Id" property="userGroupId" jdbcType="INTEGER" />
+      <result column="user_operator" property="operator" jdbcType="VARCHAR" />
+      <result column="user_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="user_operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+      <result column="user_last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+      <result column="user_last_modify_password_Time" property="lastModifyPasswordTime" jdbcType="TIMESTAMP" />
+      <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    id, name , status  , operator , create_time,operate_time , operate_ip
+  </sql>
+
+  <sql id="catalog_Column_List">
+    `catalog`.id, `catalog`.name , `catalog`.status  , `catalog`.operator , `catalog`.create_Time, `catalog`.operate_Time , `catalog`.operate_Ip
+  </sql>
+  <sql id="user_column_List">
+    `user`.id user_id, `user`.name user_name, `user`.username user_username, `user`.password user_password, `user`.email user_email , `user`.imageurl user_imageUrl, `user`.status user_status, `user`.remark user_remark , `user`.userGroup_Id user_userGroup_Id, `user`.operator user_operator , `user`.create_Time user_create_time, `user`.operate_Time user_operate_Time , `user`.last_Login_Time user_last_Login_Time, `user`.last_Modify_Password_Time user_last_Modify_Password_Time , `user`.operate_Ip user_operate_Ip
+  </sql>
+
+  <insert id="saveCatalog" keyProperty="id" useGeneratedKeys="true" parameterType="catalog">
+    INSERT INTO `catalog` (id , name , user_id , operator ) VALUES (#{id} , #{name} , {userId} , #{operator} );
+  </insert>
+
+  <select id="findByCatalogId" parameterType="java.lang.Integer" resultMap="queryResultMap">
+    SELECT <include refid="catalog_Column_List" /> , <include refid="user_column_List"/> FROM
+    `catalog` LEFT JOIN `user` ON `catalog`.user_id = `user`.id
+    <where>
+      <if test="catalogId != null">
+        AND `catalog`.id = #{catalogId}
+      </if>
+      <if test="catalogStatus != null" >
+        AND `catalog`.status = #{catalogStatus}
+      </if>
+    </where>
+  </select>
+
+  <update id="removeCatalog" parameterType="java.lang.Integer" >
+    UPDATE `catalog` SET status = 0 WHERE id = #{id}
+  </update>
+
+  <update id="removeUser" parameterType="java.lang.Long">
+    UPDATE `user` SET status = 0 WHERE  id = #{catalogId}
+  </update>
+
+  <select id="findByUserId" resultMap="queryResultMap" >
+    SELECT <include refid="catalog_Column_List" /> , <include refid="user_column_List"/> FROM
+    `catalog` LEFT JOIN `user` ON `catalog`.user_id = `user`.id
+    <where>
+      <if test="userId != null">
+        AND `user`.id = #{userId}
+      </if>
+      <if test="catalogStatus != null" >
+        AND `catalog`.status = #{catalogStatus}
+      </if>
+    </where>
+  </select>
+
+  <select id="findByUserName"  resultMap="queryResultMap">
+    SELECT <include refid="catalog_Column_List" /> , <include refid="user_column_List"/> FROM
+    `catalog` LEFT JOIN `user` ON `catalog`.user_id = `user`.id
+    <where>
+      <if test="userName != null">
+        AND `user`.username = #{userName}
+      </if>
+      <if test="catalogStatus != null" >
+        AND `catalog`.status = #{catalogStatus}
+      </if>
+    </where>
+  </select>
+  <select id="findByUserNameAndCatalogName" resultMap="queryResultMap">
+    SELECT <include refid="catalog_Column_List" /> , <include refid="user_column_List"/> FROM
+    `catalog` LEFT JOIN `user` ON `catalog`.user_id = `user`.id
+    <where>
+      <if test="name != null">
+        AND `catalog`.name = #{name}
+      </if>
+      <if test="userName != null">
+        AND `user`.username = #{userName}
+      </if>
+      <if test="userName != null" >
+        AND `catalog`.status = #{catalogStatus}
+      </if>
+    </where>
+  </select>
+  <select id="findByUserIdAndCatalogName" resultMap="queryResultMap">
+    SELECT <include refid="catalog_Column_List" /> , <include refid="user_column_List"/> FROM
+    `catalog` LEFT JOIN `user` ON `catalog`.user_id = `user`.id
+    <where>
+      <if test="name != null">
+        AND `catalog`.name = #{name}
+      </if>
+      <if test="userId != null">
+        AND `user`.id = #{userId}
+      </if>
+      <if test="userName != null" >
+        AND `catalog`.status = #{catalogStatus}
+      </if>
+    </where>
+  </select>
+
+  <select id="countCatalogsByUserIdAndName" resultType="java.lang.Integer" >
+    SELECT COUNT(*) FROM `catalog`
+    <where>
+      <if test="userId != null">
+        AND user_Id = #{userId}
+      </if>
+      <if test="name != null" >
+        AND name = #{name}
+      </if>
+      <if test="status != null">
+        AND status != #{status}
+      </if>
+    </where>
+  </select>
+
+</mapper>

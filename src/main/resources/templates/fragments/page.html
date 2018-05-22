@@ -3,9 +3,9 @@
 	  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-</head>
+</HEAD>
 <body>
-<nav th:with="page=${userModel.listUserResponse.data}" data-th-fragment="page" data-th-if="${userModel.listUserResponse.data.pages gt 0}" data-th-object="${page}" >
+<nav  data-th-fragment="page" data-th-if="${page.pages gt 0}" data-th-object="${page}" >
  
 	<!-- 处理页数小于等于7 的情况 -->
 	<ul class="pagination" data-th-if="${page.pages le 7}" >

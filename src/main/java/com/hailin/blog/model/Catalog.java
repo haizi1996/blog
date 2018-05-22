@@ -1,19 +1,32 @@
 package com.hailin.blog.model;
 
+import javax.xml.crypto.Data;
 import java.io.Serializable;
-
+import java.util.Date;
 
 /**
  * Catalog 实体
+ * 分类标签
  * 
  */
 public class Catalog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Long id; // 用户的唯一标识
+	private Integer id; // 用户的唯一标识
 
 	private String name;
- 
+
+	private Integer status;
+
+	private String operator;
+
+	private Date createTime;
+
+	private Date operateTime;
+
+	private String operateIp;
+
+	//谁创建了这个分类
 	private User user;
  
 	protected Catalog() {
@@ -24,11 +37,11 @@ public class Catalog implements Serializable {
 		this.user = user;
 	}
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
  
@@ -44,6 +57,44 @@ public class Catalog implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
- 
- 
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getOperateTime() {
+		return operateTime;
+	}
+
+	public void setOperateTime(Date operateTime) {
+		this.operateTime = operateTime;
+	}
+
+	public String getOperateIp() {
+		return operateIp;
+	}
+
+	public void setOperateIp(String operateIp) {
+		this.operateIp = operateIp;
+	}
 }

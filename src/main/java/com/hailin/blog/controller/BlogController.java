@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class BlogController {
 
-    @GetMapping
-    public String listBlogs(@RequestParam(value="order",required=false,defaultValue="new") String order,
-                            @RequestParam(value="tag",required=false) Long tag) {
-        System.out.print("order:" +order + ";tag:" +tag );
-        return "redirect:/index?order="+order+"&tag="+tag;
-    }
+//    @GetMapping
+//    public String listBlogs(@RequestParam(value="order",required=false,defaultValue="new") String order,
+//                            @RequestParam(value="tag",required=false) Long tag) {
+//        System.out.print("order:" +order + ";tag:" +tag );
+//        return "redirect:/index?order="+order+"&tag="+tag;
+//    }
 
 
 }

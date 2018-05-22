@@ -77,7 +77,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> listBlogsByCatalog(Catalog catalog) {
+    public List<Blog> listBlogsByCatalog(Catalog catalog,int pageIndex, int pageSize) {
         return null;
     }
 }

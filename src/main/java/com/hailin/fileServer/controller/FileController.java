@@ -121,6 +121,35 @@ public class FileController {
 
         return "redirect:/fileserver/";
     }
+
+
+    /**
+     * 上传
+     * @param redirectAttributes
+     * @return
+     */
+    @GetMapping ("/delete/{id}")
+    public String handleFileUpload(@PathVariable("id") String id,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+
+            fileService.deleteById(id);
+        } catch (Exception  ex) {
+            logger.error(ex.getMessage() , ex);
+            redirectAttributes.addFlashAttribute("message",
+                    "Your " + id + " is wrong!");
+            return "redirect:/fileserver/";
+        }
+
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully delete " + id + "!");
+
+        return "redirect:/fileserver/";
+    }
+
+
+
  
     @PostMapping("/upload")
     @ResponseBody

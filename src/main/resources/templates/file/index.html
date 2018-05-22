@@ -46,6 +46,7 @@
         <td>size</td>
         <td>uploadDate</td>
         <td>md5</td>
+        <td>操作</td>
     </tr>
     </thead>
     <tbody>
@@ -59,6 +60,7 @@
         <td th:text="${file.size}" ></td>
         <td th:text="${file.uploadDate}" ></td>
         <td th:text="${file.md5}" ></td>
+        <td ><a href="/fileserver/delete/"+${file.id} />删除</td>
     </tr>
     </tbody>
 </table>

@@ -140,3 +140,33 @@ CREATE TABLE `syslog`(
   operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
   status TINYINT NOT NULL COMMENT '当前是否复原过,0:没有,1:复原过'
 )ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '系统相关日志';
+
+CREATE TABLE `blog`(
+  id INT PRIMARY KEY AUTO_INCREMENT ,
+  user_id INT NOT NULL DEFAULT 0 COMMENT '用户ID',
+  Catalog_id INT NOT NULL DEFAULT 0 COMMENT '分类Id',
+  title VARCHAR(30) NOT NULL DEFAULT '' COMMENT '标题',
+  summary VARCHAR (300) NOT NULL DEFAULT 1 COMMENT '摘要',
+  content TEXT COMMENT '文章内容',
+  html_Content TEXT COMMENT '将 md 转为 html',
+  read_Size INT DEFAULT 0 COMMENT '阅读量',
+  comment_Size INT DEFAULT 0 COMMENT '评论量',
+  vote_Size INT DEFAULT 0 COMMENT '点赞量',
+  operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
+  operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
+  operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,0:删除,1:正常'
+)ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '博客表';
+
+CREATE TABLE `catalog`(
+  id INT PRIMARY KEY AUTO_INCREMENT ,
+  user_id INT NOT NULL DEFAULT 0 COMMENT '用户ID',
+  name VARCHAR(30) DEFAULT 0 COMMENT '分类标题',
+  operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
+  operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
+  operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,0:删除,1:正常'
+)ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '分类表';
+

@@ -3,6 +3,7 @@ package com.hailin.blog.service;
 import com.hailin.blog.model.Blog;
 import com.hailin.blog.model.Catalog;
 import com.hailin.blog.model.User;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public interface BlogService {
 	 * @param catalog
 	 * @return
 	 */
-    List<Blog> listBlogsByCatalog(Catalog catalog);
+    List<Blog> listBlogsByCatalog(Catalog catalog, int pageIndex, int pageSize);
 	/**
 	 * 阅读量递增
 	 * @param id

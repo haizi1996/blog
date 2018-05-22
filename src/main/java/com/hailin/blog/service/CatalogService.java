@@ -2,14 +2,13 @@ package com.hailin.blog.service;
 
 import java.util.List;
 
+import com.hailin.blog.constant.CatalogConstant;
 import com.hailin.blog.model.Catalog;
 import com.hailin.blog.model.User;
 
 /**
  * Catalog 服务接口.
  * 
- * @since 1.0.0 2017年4月10日
- * @author <a href="https://waylau.com">Way Lau</a>
  */
 public interface CatalogService {
 	/**
@@ -24,18 +23,25 @@ public interface CatalogService {
 	 * @param id
 	 * @return
 	 */
-	void removeCatalog(Long id);
+	Integer removeCatalog(Integer id);
 
 	/**
 	 * 根据id获取Catalog
 	 * @param id
 	 * @return
 	 */
-	Catalog getCatalogById(Long id);
+	Catalog getCatalogById(Integer id);
 	
 	/**
-	 * 获取Catalog列表
+	 * 根据userId获取Catalog列表
 	 * @return
 	 */
-	List<Catalog> listCatalogs(User user);
+	List<Catalog> listCatalogs(Integer userId );
+
+	/**
+	 * 根据username获取Catalog列表
+	 * @param username
+	 * @return
+	 */
+	List<Catalog> getCatalogByUsername(String username , CatalogConstant.Status catalogStatus);
 }

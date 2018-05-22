@@ -1,3 +1,7 @@
+/**
+ * Bolg main JS.
+ * Created by waylau.com on 2017/3/9.
+ */
 "use strict";
 //# sourceURL=main.js
 
@@ -24,7 +28,6 @@ $(function() {
 		     }
 		 });
 	});
-	
 	
 	// 选中菜单第一项
 	 $(".blog-menu .list-group-item:first").trigger("click");

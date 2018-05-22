@@ -63,7 +63,7 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
        //         .loginProcessingUrl("/login")//告诉security，使用UsernamePasswordAuthenticationFilter来处理请求 默认是/login
                 .and()   //表单等来
                 .authorizeRequests()  //对下面的配置授权
-                .antMatchers("/css/**", "/js/**", "/fonts/**", "/index" , "/login").permitAll() // 都可以访问
+                .antMatchers("/css/**", "/js/**", "/fonts/**", "/index","/register" , "/login").permitAll() // 都可以访问
                 .anyRequest()        //任何请求
                 .authenticated()     //需要认证
                 .and()

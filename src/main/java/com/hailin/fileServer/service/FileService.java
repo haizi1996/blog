@@ -41,4 +41,11 @@ public interface FileService {
 	 * @return
 	 */
 	List<File> listFiles();
+
+	/**
+	 * 删除文件
+	 * @param id
+	 * @return
+	 */
+	void deleteById(String id);
 }

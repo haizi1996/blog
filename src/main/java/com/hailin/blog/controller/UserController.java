@@ -39,6 +39,7 @@ public class UserController {
         PageInfo<User> pageInfo = userService.listUserAndRolesByNameLike(name , pageIndex ,pageSize , status);
         Response response = pageInfo != null ? Response.successResponse(pageInfo) : Response.errorResponse("");
         model.addAttribute("listUserResponse" , response);
+        model.addAttribute("page" , pageInfo);
         ModelAndView modelAndView = new ModelAndView(async ?"users/list :: #mainContainer" :"users/list","userModel", model);
         return modelAndView;
     }

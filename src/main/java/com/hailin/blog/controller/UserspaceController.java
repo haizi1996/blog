@@ -2,6 +2,8 @@ package com.hailin.blog.controller;
 
 import javax.annotation.Resource;
 
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.hailin.blog.dto.Response;
 import com.hailin.blog.model.Blog;
 import com.hailin.blog.model.Catalog;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -43,13 +46,13 @@ public class UserspaceController {
 	private CatalogService catalogService;
 	
 	
-//	@GetMapping("/{username}")
-//	public String userSpace(@PathVariable("username") String username, Model model) {
-//		User  user = (User)userDetailsService.loadUserByUsername(username);
+	@GetMapping("/{username}")
+	public String userSpace(@PathVariable("username") String username, Model model) {
+//		User  user = (User)userService.loadUserByUsername(username);
 //		model.addAttribute("user", user);
-//		return "redirect:/u/" + username + "/blogs";
-//	}
-//
+		return "redirect:/u/" + username + "/blogs";
+	}
+
 
 	/**
 	 * 获取个人设置的页面
@@ -129,25 +132,23 @@ public class UserspaceController {
 //		return ResponseEntity.ok().body(new Response(true, "处理成功", avatarUrl));
 //	}
 //
-//
-//	@GetMapping("/{username}/blogs")
-//	public String listBlogsByOrder(@PathVariable("username") String username,
-//			@RequestParam(value="order",required=false,defaultValue="new") String order,
-//			@RequestParam(value="catalog",required=false ) Long catalogId,
-//			@RequestParam(value="keyword",required=false,defaultValue="" ) String keyword,
-//			@RequestParam(value="async",required=false) boolean async,
-//			@RequestParam(value="pageIndex",required=false,defaultValue="0") int pageIndex,
-//			@RequestParam(value="pageSize",required=false,defaultValue="10") int pageSize,
-//			Model model) {
-//
-//		User  user = (User)userDetailsService.loadUserByUsername(username);
-//
-//		Page<Blog> page = null;
-//
+
+	@GetMapping("/{username}/blogs")
+	public String listBlogsByOrder(@PathVariable("username") String username,
+			@RequestParam(value="order",required=false,defaultValue="new") String order,
+			@RequestParam(value="catalog",required=false ) Long catalogId,
+			@RequestParam(value="keyword",required=false,defaultValue="" ) String keyword,
+			@RequestParam(value="async",required=false) boolean async,
+			@RequestParam(value="pageIndex",required=false,defaultValue="0") int pageIndex,
+			@RequestParam(value="pageSize",required=false,defaultValue="10") int pageSize,
+			Model model) {
+
+		User  user = (User)userService.loadUserByUsername(username);
+
+
 //		if (catalogId != null && catalogId > 0) { // 分类查询
 //			Catalog catalog = catalogService.getCatalogById(catalogId);
-//			Pageable pageable = new PageRequest(pageIndex, pageSize);
-//			page = blogService.listBlogsByCatalog(catalog, pageable);
+//			List<Blog> blogs = blogService.listBlogsByCatalog(catalog, pageIndex ,pageSize);
 //			order = "";
 //		} else if (order.equals("hot")) { // 最热查询
 //			Sort sort = new Sort(Direction.DESC,"readSize","commentSize","voteSize");
@@ -157,19 +158,19 @@ public class UserspaceController {
 //			Pageable pageable = new PageRequest(pageIndex, pageSize);
 //			page = blogService.listBlogsByTitleVote(user, keyword, pageable);
 //		}
-//
-//
+
+
 //		List<Blog> list = page.getContent();	// 当前所在页面数据列表
-//
-//		model.addAttribute("user", user);
+
+		model.addAttribute("user", user);
 //		model.addAttribute("order", order);
 //		model.addAttribute("catalogId", catalogId);
 //		model.addAttribute("keyword", keyword);
-//		model.addAttribute("page", page);
+		model.addAttribute("page", PageInfo.of(Lists.newArrayList()));
 //		model.addAttribute("blogList", list);
-//		return (async==true?"/userspace/u :: #mainContainerRepleace":"/userspace/u");
-//	}
-//
+		return (async==true?"userspace/u :: #mainContainerRepleace":"userspace/u");
+	}
+
 	/**
 	 * 获取博客展示界面
 	 * @param id
@@ -242,35 +243,35 @@ public class UserspaceController {
 	@GetMapping("/{username}/blogs/edit")
 	public ModelAndView createBlog(@PathVariable("username") String username, Model model) {
 		User user = (User)userService.loadUserByUsername(username);
-		List<Catalog> catalogs = catalogService.listCatalogs(user);
+		List<Catalog> catalogs = catalogService.listCatalogs(user.getId());
 
 		model.addAttribute("blog", new Blog(null, null, null));
 		model.addAttribute("catalogs", catalogs);
 		return new ModelAndView("/userspace/blogedit", "blogModel", model);
 	}
 
-//	/**
-//	 * 获取编辑博客的界面
-//	 * @param model
-//	 * @return
-//	 */
-//	@GetMapping("/{username}/blogs/edit/{id}")
-//	public ModelAndView editBlog(@PathVariable("username") String username, @PathVariable("id") Long id, Model model) {
-//		// 获取用户分类列表
-//		User user = (User)userDetailsService.loadUserByUsername(username);
-//		List<Catalog> catalogs = catalogService.listCatalogs(user);
-//
-//		model.addAttribute("blog", blogService.getBlogById(id));
+	/**
+	 * 获取编辑博客的界面
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/{username}/blogs/edit/{id}")
+	public ModelAndView editBlog(@PathVariable("username") String username, @PathVariable("id") Long id, Model model) {
+		// 获取用户分类列表
+		User user = (User)userService.loadUserByUsername(username);
+//		List<Catalog> catalogs = catalogService.getCatalogByUsername(username);
+
+		model.addAttribute("blog", blogService.getBlogById(id));
 //		model.addAttribute("catalogs", catalogs);
-//		return new ModelAndView("/userspace/blogedit", "blogModel", model);
-//	}
-//
-//	/**
-//	 * 保存博客
-//	 * @param username
-//	 * @param blog
-//	 * @return
-//	 */
+		return new ModelAndView("/userspace/blogedit", "blogModel", model);
+	}
+
+	/**
+	 * 保存博客
+	 * @param username
+	 * @param blog
+	 * @return
+	 */
 //	@PostMapping("/{username}/blogs/edit")
 //	@PreAuthorize("authentication.name.equals(#username)")
 //	public ResponseEntity<Response> saveBlog(@PathVariable("username") String username, @RequestBody Blog blog) {
