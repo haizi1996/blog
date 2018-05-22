@@ -1,5 +1,8 @@
 package com.hailin.blog.model;
 
+import com.hailin.blog.constant.CatalogConstant;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -97,4 +100,26 @@ public class Catalog implements Serializable {
 	public void setOperateIp(String operateIp) {
 		this.operateIp = operateIp;
 	}
+
+	public Catalog setStatusEnum(CatalogConstant.Status statusEnum){
+		setStatus(statusEnum.getCode());
+		return this;
+	}
+
+
+	public static Catalog buildNormalCatalogById(Integer catalogId , HttpServletRequest request){
+		Catalog catalog = new Catalog();
+		catalog.setId(catalogId);
+		catalog.setStatusEnum(CatalogConstant.Status.NORMAL);
+		catalog.setOperateIp(request.getLocalAddr());
+		return catalog;
+	}
+	public static Catalog buildDeleteCatalogById(Integer catalogId , HttpServletRequest request){
+		Catalog catalog = new Catalog();
+		catalog.setId(catalogId);
+		catalog.setStatusEnum(CatalogConstant.Status.DELETE);
+		catalog.setOperateIp(request.getLocalAddr());
+		return catalog;
+	}
+
 }

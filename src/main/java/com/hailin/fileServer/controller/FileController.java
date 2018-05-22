@@ -159,9 +159,9 @@ public class FileController {
         	File f = new File(file.getOriginalFilename(),  file.getContentType(), file.getSize(),file.getBytes());
         	f.setMd5( MD5Util.getMD5(file.getInputStream()) );
         	returnFile = fileService.saveFile(f);
-        	returnFile.setPath("http://localhost:8080/view/"+f.getId());
+        	returnFile.setPath("http://localhost:8080/fileserver/view/"+f.getId());
         	returnFile.setContent(null) ;
-        	return ResponseEntity.status(HttpStatus.OK).body("http://localhost:8080/view/"+f.getId());
+        	return ResponseEntity.status(HttpStatus.OK).body(returnFile.getPath());
  
         } catch (IOException | NoSuchAlgorithmException ex) {
             logger.error(ex.getMessage() , ex);

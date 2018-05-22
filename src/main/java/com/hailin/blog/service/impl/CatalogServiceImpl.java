@@ -2,6 +2,8 @@ package com.hailin.blog.service.impl;
 
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import com.hailin.blog.constant.CatalogConstant;
 import com.hailin.blog.dao.CatalogDao;
 import com.hailin.blog.model.Catalog;
@@ -21,23 +23,26 @@ public class CatalogServiceImpl implements CatalogService {
 	private CatalogDao catalogDao;
 
 	@Override
-	public Catalog saveCatalog(Catalog catalog) {
-		Integer num = catalogDao.countCatalogsByUserIdAndName(catalog.getUser().getId() , catalog.getName() );
-	if(num > 0){
-		throw new IllegalArgumentException("分类已经存在");
-	}
-		Integer rows = catalogDao.saveCatalog(catalog);
-		return rows > 0 ? catalogDao.findByCatalogId(catalog.getId()) : null;
+	public void saveAndUpdateCatalog(Catalog catalog) {
+		Integer num = catalogDao.countCatalogsByUserIdAndName(catalog.getUser().getId() , catalog.getName() , CatalogConstant.Status.NORMAL.getCode() );
+		if(num > 0){
+			throw new IllegalArgumentException("分类已经存在");
+		}
+		Integer rows = 0 ;
+		if(catalog.getId() == null){
+			rows = catalogDao.saveCatalog(catalog);
+		}else{
+			rows = catalogDao.resetCatalog(catalog);
+
+		}
+		Preconditions.checkArgument(rows > 0 , "服务器异常，创建分类失败!");
 	}
 
-	@Override
-	public Integer removeCatalog(Integer id) {
-		return catalogDao.removeCatalog(id);
-	}
+
 
 	@Override
-	public Catalog getCatalogById(Integer id) {
-		return catalogDao.findByCatalogId(id);
+	public Catalog getCatalogById(Integer id , CatalogConstant.Status status) {
+		return catalogDao.findByCatalogId(id , status.getCode());
 	}
 
 	@Override
@@ -49,6 +54,11 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public List<Catalog> getCatalogByUsername(String username ,CatalogConstant.Status catalogStatus) {
 		return catalogDao.findByUserName(username , catalogStatus.getCode());
+	}
+
+	@Override
+	public Integer resetCatalog(Catalog catalog) {
+		return catalogDao.resetCatalog(catalog);
 	}
 }
 

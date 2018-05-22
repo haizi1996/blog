@@ -4,17 +4,17 @@
   <resultMap id="BaseResultMap" type="com.hailin.blog.model.Catalog" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="status" property="password" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
     <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
   </resultMap>
 
-  <resultMap id="queryResultMap" type="com.hailin.blog.model.User" >
+  <resultMap id="queryResultMap" type="com.hailin.blog.model.Catalog" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="status" property="password" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
@@ -51,7 +51,7 @@
   </sql>
 
   <insert id="saveCatalog" keyProperty="id" useGeneratedKeys="true" parameterType="catalog">
-    INSERT INTO `catalog` (id , name , user_id , operator ) VALUES (#{id} , #{name} , {userId} , #{operator} );
+    INSERT INTO `catalog` (id , name , user_id , operator ) VALUES (#{id} , #{name} , #{user.id} , #{operator});
   </insert>
 
   <select id="findByCatalogId" parameterType="java.lang.Integer" resultMap="queryResultMap">
@@ -68,12 +68,37 @@
   </select>
 
   <update id="removeCatalog" parameterType="java.lang.Integer" >
-    UPDATE `catalog` SET status = 0 WHERE id = #{id}
+    UPDATE `catalog` SET status = 0  WHERE id = #{catalogId}
   </update>
 
-  <update id="removeUser" parameterType="java.lang.Long">
-    UPDATE `user` SET status = 0 WHERE  id = #{catalogId}
+  <update id="resetCatalog" parameterType="catalog">
+    UPDATE `catalog`
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+      <if test="operator != null">
+        operator = #{operator},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp},
+      </if>
+      operate_time = now()
+    </set>
+    <where>
+      <if test="id != null">
+        AND `id` = #{id}
+      </if>
+
+      <if test="user != null and user.id != null">
+        AND user_id=#{user.id}
+      </if>
+    </where>
   </update>
+
 
   <select id="findByUserId" resultMap="queryResultMap" >
     SELECT <include refid="catalog_Column_List" /> , <include refid="user_column_List"/> FROM
@@ -141,7 +166,7 @@
         AND name = #{name}
       </if>
       <if test="status != null">
-        AND status != #{status}
+        AND status = #{status}
       </if>
     </where>
   </select>

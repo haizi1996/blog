@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
@@ -75,7 +76,8 @@ public class CatalogController {
 
         try{
             catalog.setUser(user);
-            catalogService.saveCatalog(catalog);
+            catalog.setOperator(catalogVO.getUsername());
+            catalogService.saveAndUpdateCatalog(catalog);
         }catch (ConstraintViolationException e){
             logger.error(e.getMessage() , e);
             return ResponseEntity.ok().body(Response.errorResponse(ConstraintViolationExceptionHandler.getMessage(e)));
@@ -94,15 +96,17 @@ public class CatalogController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("authentication.name.equals(#username)")  // 指定用户才能操作方法
-    public ResponseEntity<Response> delete(String username, @PathVariable("id") Integer id) {
+    public ResponseEntity<Response> delete(String username, @PathVariable("id") Integer id , HttpServletRequest request) {
         try {
-            catalogService.removeCatalog(id);
+            Catalog catalog = Catalog.buildDeleteCatalogById(id ,request);
+            catalog.setOperator(username);
+            catalogService.resetCatalog(catalog);
         } catch (ConstraintViolationException e)  {
             return ResponseEntity.ok().body(Response.errorResponse(ConstraintViolationExceptionHandler.getMessage(e)));
         } catch (Exception e) {
             return ResponseEntity.ok().body(Response.errorResponse( e.getMessage()));
         }
-        return ResponseEntity.ok().body(Response.successResponse("处理成功"));
+        return ResponseEntity.ok().body(Response.successResponse("删除分类成功!"));
     }
 
     /**
@@ -113,6 +117,19 @@ public class CatalogController {
     @GetMapping("/edit")
     public String getCatalogEdit(Model model) {
         Catalog catalog = new Catalog(null, null);
+        model.addAttribute("catalog",catalog);
+        return "/userspace/catalogedit";
+    }
+
+    /**
+     * 根据 Id 获取分类信息
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/edit/{id}")
+    public String getCatalogById(@PathVariable("id") Integer id, Model model) {
+        Catalog catalog = catalogService.getCatalogById(id , CatalogConstant.Status.NORMAL);
         model.addAttribute("catalog",catalog);
         return "/userspace/catalogedit";
     }

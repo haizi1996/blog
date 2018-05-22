@@ -54,13 +54,13 @@
         <td colspan="3">没有文件信息！！</td>
     </tr>
     <tr th:each="file : ${files}">
-        <td><a th:href="${file.id}" th:text="${file.name}" /></td>
+        <td><a th:href="@{'/fileserver/'+${file.id}}" th:text="${file.name}" /></td>
         <td th:text="${file.id}" ></td>
         <td th:text="${file.contentType}" ></td>
         <td th:text="${file.size}" ></td>
         <td th:text="${file.uploadDate}" ></td>
         <td th:text="${file.md5}" ></td>
-        <td ><a href="/fileserver/delete/"+${file.id} />删除</td>
+        <td ><a th:href="@{'/fileserver/delete/'+${file.id}}" th:text="删除"/></td>
     </tr>
     </tbody>
 </table>

@@ -1,8 +1,6 @@
 /*!
  * Avatar JS.
  * 
- * @since: 1.0.0 2017/4/6
- * @author Way Lau <https://waylau.com>
  */
 "use strict";
 //# sourceURL=main.js
@@ -52,7 +50,7 @@ $(function() {
  	    formData.append("file",convertBase64UrlToBlob(base64Codes)); 
 	    
  	    $.ajax({
-		    url: fileServerUrl,  // 文件服务器地址
+		    url: '/fileserver/upload',  // 文件服务器地址
 		    type: 'POST',
 		    cache: false,
 		    data: formData,
@@ -60,25 +58,25 @@ $(function() {
 		    contentType: false,
 		    success: function(data){
 		    	
-		    	var avatarUrl = data;
+		    	var imageUrl = data;
 		    	
 				// 获取 CSRF Token 
-				var csrfToken = $("meta[name='_csrf']").attr("content");
-				var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+				// var csrfToken = $("meta[name='_csrf']").attr("content");
+				// var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		    	// 保存头像更改到数据库
 				$.ajax({ 
 					 url: avatarApi, 
 					 type: 'POST',
 					 contentType: "application/json; charset=utf-8",
 					 data: JSON.stringify({"id":Number($("#userId").val()), 
-						 	"avatar":avatarUrl}),
-					 beforeSend: function(request) {
-		                 request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-		             },
+						 	"imageUrl":imageUrl}),
+                     // beforeSend: function(request) {
+		             //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+		             // },
 					 success: function(data){
-						 if (data.success) {
+						 if (data.code == 1) {
 							// 成功后，置换头像图片
-							 $(".blog-avatar").attr("src", data.avatarUrl);
+							 $(".blog-avatar").attr("src", data.data);
 						 } else {
 							 toastr.error("error!"+data.message);
 						 }

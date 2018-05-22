@@ -25,7 +25,7 @@ $(function() {
     
     $("#uploadImage").click(function() {
         $.ajax({
-            url: fileServerUrl,
+            url: '/fileserver/upload',
             type: 'POST',
             cache: false,
             data: new FormData($('#uploadformid')[0]),
@@ -33,7 +33,7 @@ $(function() {
             contentType: false,
             success: function(data){
                 var mdcontent=$("#md").val();
-                 $("#md").val(mdcontent + "\n![]("+data +") \n");
+                 $("#md").val(mdcontent + "![]("+data +") \n");
 
              }
         }).done(function(res) {
@@ -45,8 +45,8 @@ $(function() {
     $("#submitBlog").click(function() {
 
         // 获取 CSRF Token 
-        var csrfToken = $("meta[name='_csrf']").attr("content");
-        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        // var csrfToken = $("meta[name='_csrf']").attr("content");
+        // var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 
         $.ajax({
             url: '/u/'+ $(this).attr("userName") + '/blogs/edit',
@@ -63,9 +63,9 @@ $(function() {
             //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
             // },
              success: function(data){
-                 if (data.success) {
+                 if (data.code == 1) {
                     // 成功后，重定向
-                     window.location = data.body;
+                     window.location = data.data;
                  } else {
                      toastr.error("error!"+data.message);
                  }

@@ -3,6 +3,7 @@ package com.hailin.blog.dao;
 import com.hailin.blog.model.Catalog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface CatalogDao {
      * @return
      */
 
-    Catalog findByCatalogId(@Param("catalogId") Integer catalogId);
+    Catalog findByCatalogId(@Param("catalogId") Integer catalogId , @Param("catalogStatus") Integer catalogStatus);
 
     /**
      * 根据userId和分类name进行统计
@@ -30,7 +31,7 @@ public interface CatalogDao {
      * @param name
      * @return
      */
-    Integer countCatalogsByUserIdAndName(@Param("userId") Integer userId, @Param("name") String name);
+    Integer countCatalogsByUserIdAndName(@Param("userId") Integer userId, @Param("name") String name , @Param("status")Integer status);
 
     /**
      * 删除分类
@@ -68,4 +69,9 @@ public interface CatalogDao {
      */
     List<Catalog> findByUserIdAndCatalogName(@Param("userId") Integer userId, @Param("name") String name);
 
+    /**
+     * 根据userId,catalog名字重置分类的状态
+     * @return
+     */
+    Integer resetCatalog(Catalog catalog);
 }

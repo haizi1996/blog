@@ -45,7 +45,7 @@ public class User implements  Serializable,UserDetails {
 	@Size(max=100)
 	private String password;
 
-	// 登录时密码
+	// 图片地址
 	private String imageUrl;
 
 	//用户状态,1:正常状态 , 0代表冻结状态，2代表删除

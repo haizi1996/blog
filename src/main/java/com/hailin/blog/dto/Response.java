@@ -5,7 +5,7 @@ public class Response <T>{
     //1代表成功返回
     private int code ;
 
-    private String errorMessage;
+    private String message;
 
     private T data;
 
@@ -17,13 +17,6 @@ public class Response <T>{
         this.code = code;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
 
     public T getData() {
         return data;
@@ -38,9 +31,18 @@ public class Response <T>{
         this.data = data;
     }
 
-    public Response(int code, String errorMessage) {
+    public String getMessage() {
+        return message;
+    }
+
+    public Response setMessage(String message) {
+        this.message = message;
+        return this;
+    }
+
+    public Response(int code, String message) {
         this.code = code;
-        this.errorMessage = errorMessage;
+        this.message = message;
     }
 
     public static<T> Response successResponse (T t){
@@ -48,6 +50,6 @@ public class Response <T>{
     }
 
     public static <T> Response errorResponse(String erroeMessage){
-        return new Response(1 , erroeMessage);
+        return new Response(0 , erroeMessage);
     }
 }
