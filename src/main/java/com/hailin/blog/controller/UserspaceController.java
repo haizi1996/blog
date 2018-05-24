@@ -5,6 +5,8 @@ import javax.validation.ConstraintViolationException;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.hailin.blog.constant.CatalogConstant;
+import com.hailin.blog.constant.SortType;
 import com.hailin.blog.dto.Response;
 import com.hailin.blog.model.Blog;
 import com.hailin.blog.model.Catalog;
@@ -44,6 +46,9 @@ public class UserspaceController {
 	
 	@Resource
 	private BlogService blogService;
+
+	@Resource
+	private CatalogService catalogService;
 	
 
 	
@@ -134,7 +139,7 @@ public class UserspaceController {
 	@GetMapping("/{username}/blogs")
 	public String listBlogsByOrder(@PathVariable("username") String username,
 			@RequestParam(value="order",required=false,defaultValue="new") String order,
-			@RequestParam(value="catalog",required=false ) Long catalogId,
+			@RequestParam(value="catalog",required=false ) Integer catalogId,
 			@RequestParam(value="keyword",required=false,defaultValue="" ) String keyword,
 			@RequestParam(value="async",required=false) boolean async,
 			@RequestParam(value="pageIndex",required=false,defaultValue="0") int pageIndex,
@@ -142,19 +147,22 @@ public class UserspaceController {
 			Model model) {
 
 		User  user = (User)userService.loadUserByUsername(username);
-
-
+		List<Blog> blogs = Lists.newArrayList();
+		blogs = blogService.listBlogsByCatalogAndUser(user.getId() , catalogId,
+				CatalogConstant.Status.NORMAL ,
+				SortType.parseToSortType(order), pageIndex ,pageSize);
 //		if (catalogId != null && catalogId > 0) { // 分类查询
-//			Catalog catalog = catalogService.getCatalogById(catalogId);
-//			List<Blog> blogs = blogService.listBlogsByCatalog(catalog, pageIndex ,pageSize);
+//			 blogs = blogService.listBlogsByCatalogAndUser(user.getId() , catalogId, CatalogConstant.Status.NORMAL ,
+//					 SortType.parseToSortType(order), pageIndex ,pageSize);
 //			order = "";
 //		} else if (order.equals("hot")) { // 最热查询
-//			Sort sort = new Sort(Direction.DESC,"readSize","commentSize","voteSize");
-//			Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
-//			page = blogService.listBlogsByTitleVoteAndSort(user, keyword, pageable);
+////			Sort sort = new Sort(Direction.DESC,"readSize","commentSize","voteSize");
+////			Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
+////			page = blogService.listBlogsByTitleVoteAndSort(user, keyword, pageable);
+//			blogs = blogService.listBlogsByCatalogAndUser(user.getId() , catalogId, CatalogConstant.Status.NORMAL , pageIndex ,pageSize);
 //		} else if (order.equals("new")) { // 最新查询
-//			Pageable pageable = new PageRequest(pageIndex, pageSize);
-//			page = blogService.listBlogsByTitleVote(user, keyword, pageable);
+////			Pageable pageable = new PageRequest(pageIndex, pageSize);
+////			page = blogService.listBlogsByTitleVote(user, keyword, pageable);
 //		}
 
 
@@ -162,10 +170,10 @@ public class UserspaceController {
 
 		model.addAttribute("user", user);
 //		model.addAttribute("order", order);
-//		model.addAttribute("catalogId", catalogId);
+		model.addAttribute("catalogId", catalogId);
 //		model.addAttribute("keyword", keyword);
-		model.addAttribute("page", PageInfo.of(Lists.newArrayList()));
-//		model.addAttribute("blogList", list);
+		model.addAttribute("page", PageInfo.of(blogs));
+		model.addAttribute("blogList", blogs);
 		return (async==true?"userspace/u :: #mainContainerRepleace":"userspace/u");
 	}
 

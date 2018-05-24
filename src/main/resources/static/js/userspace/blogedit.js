@@ -21,8 +21,23 @@ $(function() {
     });
         
     $('.form-control-chosen').chosen();
-    
-    
+
+    // 初始化标签
+    // $('.form-control-tag').tagsInput({
+    //     'defaultText':'输入标签'
+    // });
+
+    // 初始化标签控件
+    $('.form-control-tag').tagEditor({
+        initialTags: [],
+        maxTags: 5,
+        delimiter: ', ',
+        forceLowercase: false,
+        animateDelete: 0,
+        placeholder: '请输入标签'
+    });
+
+
     $("#uploadImage").click(function() {
         $.ajax({
             url: '/fileserver/upload',
@@ -33,7 +48,7 @@ $(function() {
             contentType: false,
             success: function(data){
                 var mdcontent=$("#md").val();
-                 $("#md").val(mdcontent + "![]("+data +") \n");
+                 $("#md").val(mdcontent + "\n![]("+data +") \n");
 
              }
         }).done(function(res) {
@@ -49,7 +64,7 @@ $(function() {
         // var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 
         $.ajax({
-            url: '/u/'+ $(this).attr("userName") + '/blogs/edit',
+            url: '/blog/'+ $(this).attr("userName") + '/edit',
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data:JSON.stringify({"id":$('#blogId').val(), 
@@ -66,21 +81,23 @@ $(function() {
                  if (data.code == 1) {
                     // 成功后，重定向
                      window.location = data.data;
-                 } else {
+                 } else if(data.code == -1){
+                     var node = data.data;
+                     for (var x in node) { // 遍历Map
+                         toastr.error(node[x])
+                     }
+                 }else{
                      toastr.error("error!"+data.message);
                  }
 
              },
-             error : function() {
+             error : function(data) {
+                alert(data.code);
                  toastr.error("error!");
              }
         })
     })
     
-    // 初始化标签
-    $('.form-control-tag').tagsInput({
-    	'defaultText':'输入标签'
-    });
 
 
 });

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hailin.blog.dao.BlogDao">
+
+
+
+  <resultMap id="BaseResultMap" type="com.hailin.blog.model.Blog">
+    <id column="id" jdbcType="INTEGER" javaType="Long" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="read_Size" jdbcType="INTEGER" property="readSize" />
+    <result column="comment_Size" jdbcType="INTEGER" property="commentSize" />
+    <result column="vote_Size" jdbcType="INTEGER" property="voteSize" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="html_Content" jdbcType="LONGVARCHAR" property="htmlContent" />
+  </resultMap>
+
+
+
+  <resultMap id="queryResultMap" type="com.hailin.blog.model.Blog" extends="BaseResultMap">
+    <association javaType="com.hailin.blog.model.User" property="user">
+      <id column="user_id" jdbcType="INTEGER" property="id" />
+      <result column="user_username" jdbcType="VARCHAR" property="username" />
+      <result column="user_name" jdbcType="VARCHAR" property="name" />
+      <result column="user_password" jdbcType="VARCHAR" property="password" />
+      <result column="user_email" jdbcType="VARCHAR" property="email" />
+      <result column="user_imageUrl" jdbcType="VARCHAR" property="imageUrl" />
+      <result column="user_remark" jdbcType="VARCHAR" property="remark" />
+      <result column="user_status" jdbcType="INTEGER" property="status" />
+      <result column="user_userGroup_Id" jdbcType="INTEGER" property="userGroupId" />
+      <result column="user_operator" jdbcType="VARCHAR" property="operator" />
+      <result column="user_create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="user_operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+      <result column="user_last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+      <result column="user_last_modify_password_Time" jdbcType="TIMESTAMP" property="lastModifyPasswordTime" />
+      <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    </association>
+  </resultMap>
+
+  <resultMap id="queryBlogCatalogUser" type="com.hailin.blog.model.Blog" extends="queryResultMap">
+    <association javaType="com.hailin.blog.model.Catalog" property="catalog">
+      <id column="catalog_id" property="id" jdbcType="INTEGER" />
+      <result column="catalog_name" property="name" jdbcType="VARCHAR" />
+      <result column="catalog_status" property="status" jdbcType="INTEGER" />
+      <result column="catalog_operator" property="operator" jdbcType="VARCHAR" />
+      <result column="catalog_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="catalog_operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+      <result column="catalog_operate_ip" property="operateIp" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+
+  <resultMap id="queryBlogCatalogUserComment" type="com.hailin.blog.model.Blog" extends="queryBlogCatalogUser">
+    <collection ofType="com.hailin.blog.model.Comment" javaType="ArrayList" property="comments">
+      <id column="comment_id" property="id" jdbcType="INTEGER" />
+      <result column="comment_content" property="content" jdbcType="VARCHAR" />
+      <result column="comment_status" property="status" jdbcType="INTEGER" />
+      <result column="comment_operator" property="operator" jdbcType="VARCHAR" />
+      <result column="comment_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="comment_operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+      <result column="comment_operate_ip" property="operateIp" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+
+  
+  
+  <sql id="Base_Column_List">
+    `blog`.id, `blog`.title , `blog`.summary  ,`blog`.content , `blog`.tags , `blog`.html_Content , `blog`.operator , `blog`.read_Size ,
+      `blog`.vote_Size , `blog`.status , `blog`.create_time, `blog`.operate_time , `blog`.operate_ip
+  </sql>
+
+  <sql id="catalog_Column_List">
+    `catalog`.id, catalog_id , `catalog`.name catalog_name , `catalog`.status  catalog_status , `catalog`.operator catalog_operator , `catalog`.create_Time catalog_create_time , `catalog`.operate_Time catalog_operate_time , `catalog`.operate_Ip catalog_operate_ip
+  </sql>
+  <sql id="user_column_List" >
+    `user`.id user_id, `user`.name user_name, `user`.username user_username, `user`.password user_password, `user`.email user_email , `user`.imageurl user_imageUrl, `user`.status user_status, `user`.remark user_remark , `user`.userGroup_Id user_userGroup_Id, `user`.operator user_operator , `user`.create_Time user_create_time, `user`.operate_Time user_operate_Time , `user`.last_Login_Time user_last_Login_Time, `user`.last_Modify_Password_Time user_last_Modify_Password_Time , `user`.operate_Ip user_operate_Ip
+  </sql>
+
+  <sql id="comment_Column_List">
+    `comment`.id comment_id , `comment`.content comment_content , `comment`.status comment_status , `comment`.operator comment_operator , `comment`.create_Time comment_create_Time, `comment`.operate_Time comment_operate_Time , `comment`.operate_Ip comment_operate_Ip
+  </sql>
+
+
+  <insert id="saveBlog" keyProperty="id" parameterType="catalog" useGeneratedKeys="true">
+    INSERT INTO `blog` (id , title , summary , tags , content , html_Content , user_id , operator ,catalog_id) VALUES (#{id} , #{title} , #{summary} , #{tags} , #{content} , #{htmlContent} , #{user.id} , #{user.username} , #{catalog.id});
+  </insert>
+
+<select id="findBlogById" resultMap="queryBlogCatalogUserComment" >
+  SELECT <include refid="Base_Column_List"/> ,
+        <include refid="user_column_List" />,
+        <include refid="catalog_Column_List" />,
+        <include refid="comment_Column_List" />
+  FROM `blog`
+  LEFT JOIN `user` ON `blog`.user_id = `user`.id
+  LEFT JOIN `catalog` ON `blog`.catalog_id = `catalog`.id
+  LEFT JOIN `comment` ON `blog`.id = `comment`.blog_id AND `comment`.STATUS = 1
+  <where>
+    <if test="blogId != null">
+      AND `blog`.id = #{blogId}
+    </if>
+    <if test="status != null" >
+      AND `blog`.status = #{status}
+    </if>
+  </where>
+</select>
+
+  <select id="findBlogs" resultMap="queryBlogCatalogUser" >
+    SELECT <include refid="Base_Column_List"/> ,
+    <include refid="user_column_List" />,
+    <include refid="catalog_Column_List" />
+    FROM `blog`
+    LEFT JOIN `user` ON `blog`.user_id = `user`.id
+    LEFT JOIN `catalog` ON `blog`.catalog_id = `catalog`.id
+    <where>
+      <if test="blogId != null">
+        AND `blog`.id = #{blogId}
+      </if>
+      <if test="userId != null">
+        AND `blog`.user_Id = #{userId}
+      </if>
+      <if test="catalogId != null and catalogId != '0'" >
+        AND `blog`.catalog_id = #{catalogId}
+      </if>
+
+      <if test="status != null" >
+        AND `blog`.status = #{status}
+      </if>
+
+    </where>
+
+    <if test="sortType != null and sortType == 'new'">
+      ORDER BY `blog`.create_time desc
+    </if>
+    <if test="sortType != null and sortType == 'hot'">
+      ORDER BY `blog`.create_time desc
+    </if>
+  </select>
+  <update id="updateBlog" parameterType="blog" >
+    UPDATE `blog`
+    <set>
+      <if test="title != null" >
+        title = #{tile},
+      </if>
+      <if test="summary != null">
+        summary = #{summary},
+      </if>
+      <if test="tags != null" >
+        tags = #{tags},
+      </if>
+      <if test="operateIp != null" >
+        operate_Ip = #{operateIp},
+      </if>
+      <if test="operator != null">
+        operator = #{operator},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+      operate_Time = now()
+    </set>
+    <where>
+      <if test="id != null">
+       AND id = #{id}
+      </if>
+    </where>
+
+  </update>
+
+
+
+</mapper>

@@ -41,7 +41,7 @@ INSERT INTO `menu` (name , url , priority ) VALUES ('用户管理' , '/users/lis
 CREATE TABLE `userGroup`(
   id INT AUTO_INCREMENT PRIMARY KEY ,
   name VARCHAR(20) UNIQUE NOT NULL COMMENT '用户组的组名',
-  parent_id INT NOT NULL DEFAULT 0 COMMENT '上层yoghurt组ID',
+  parent_id INT NOT NULL DEFAULT 0 COMMENT '上层用户组ID',
   level TINYINT NOT NULL DEFAULT 1 COMMENT '层级',
   seq TINYINT NOT NULL DEFAULT 1 COMMENT '相同层级排序关键字',
   remark VARCHAR(200) DEFAULT '' COMMENT '备注',
@@ -147,6 +147,7 @@ CREATE TABLE `blog`(
   Catalog_id INT NOT NULL DEFAULT 0 COMMENT '分类Id',
   title VARCHAR(30) NOT NULL DEFAULT '' COMMENT '标题',
   summary VARCHAR (300) NOT NULL DEFAULT 1 COMMENT '摘要',
+  tags VARCHAR(50) NOT NULL DEFAULT '' COMMENT '标签',
   content TEXT COMMENT '文章内容',
   html_Content TEXT COMMENT '将 md 转为 html',
   read_Size INT DEFAULT 0 COMMENT '阅读量',
@@ -169,4 +170,17 @@ CREATE TABLE `catalog`(
   operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
   status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,0:删除,1:正常'
 )ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '分类表';
+
+CREATE TABLE `comment`(
+  id INT PRIMARY KEY AUTO_INCREMENT ,
+  user_id INT NOT NULL DEFAULT 0 COMMENT '用户ID',
+  blog_id bigint NOT NULL DEFAULT 0 COMMENT '博文ID',
+  content VARCHAR(30) DEFAULT 0 COMMENT '评论',
+  operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
+  operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
+  operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,0:删除,1:正常'
+)ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '评论表';
+
 

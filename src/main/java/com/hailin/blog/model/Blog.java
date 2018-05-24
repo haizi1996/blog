@@ -1,10 +1,16 @@
 package com.hailin.blog.model;
 
+import com.github.rjeschke.txtmark.Processor;
+import com.hailin.blog.constant.BlogConstant;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
+
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -17,38 +23,86 @@ public class Blog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id; // 用户的唯一标识
-	
-	@Size(min=2, max=50)
+
+	@Size(min=2, max=50,message = "标题长度在2和50之间")
+	@NotNull(message = "标题不能为空")
 	private String title;
 	
-	@Size(min=2, max=300)
+	@Size(min=2, max=300 ,message = "摘要长度在2和300之间")
+	@NotNull(message = "摘要不能为空")
 	private String summary;
 
-	@Size(min=2)
-	private String content;
-	
-	@Size(min=2)
-	private String htmlContent; // 将 md 转为 html
- 	
+
+	@Length(min = 1,message = "标签不能为空")
+	private String tags;  // 标签
+
+
 	private User user;
-	
+
 	private Date createTime;
 
 	private Integer readSize = 0; // 访问量、阅读量
-	 
+
 	private Integer commentSize = 0;  // 评论量
 
 	private Integer voteSize = 0;  // 点赞量
-	
+
 
 	private List<Comment> comments;
 
 	private List<Vote> votes;
-	
+
+	@NotNull(message = "未选择分类")
 	private Catalog catalog;
 
-	private String tags;  // 标签
-	
+	private String operator;
+
+	private Date operateTime;
+
+	private String operateIp;
+
+	private Integer status;
+
+
+	@Size(min=2,message = "博客主体长度不能小于2为空")
+	@NotNull(message = "博客主体不能为空")
+	private String content;
+	@Size(min=2)
+	private String htmlContent; // 将 md 转为 html
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public Blog setOperator(String operator) {
+		this.operator = operator;
+		return this;
+	}
+
+	public Date getOperateTime() {
+		return operateTime;
+	}
+
+	public void setOperateTime(Date operateTime) {
+		this.operateTime = operateTime;
+	}
+
+	public String getOperateIp() {
+		return operateIp;
+	}
+
+	public void setOperateIp(String operateIp) {
+		this.operateIp = operateIp;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	protected Blog() {
 		// TODO Auto-generated constructor stub
 	}
@@ -62,8 +116,9 @@ public class Blog implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public Blog setId(Long id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getTitle() {
@@ -88,7 +143,7 @@ public class Blog implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
-//		this.htmlContent = Processor.process(constant);
+		this.htmlContent = Processor.process(content);
 	}
 	public User getUser() {
 		return user;
@@ -215,6 +270,14 @@ public class Blog implements Serializable {
 	}
 	public void setCatalog(Catalog catalog) {
 		this.catalog = catalog;
+	}
+
+	public static Blog buildDeleteBlog(Long id ,HttpServletRequest request){
+		Blog blog = new Blog();
+		blog.setId(id);
+		blog.setStatus(BlogConstant.Status.DELETE.getCode());
+		blog.setOperateIp(request.getLocalAddr());
+		return blog;
 	}
 
 }

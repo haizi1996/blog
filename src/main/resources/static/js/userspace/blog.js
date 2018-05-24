@@ -1,9 +1,4 @@
-/*!
- * blog.html 页面脚本.
- * 
- * @since: 1.0.0 2017-03-26
- * @author Way Lau <https://waylau.com>
- */
+
 "use strict";
 //# sourceURL=blog.js
 
@@ -14,20 +9,20 @@ $(function() {
 	// 处理删除博客事件
 	$(".blog-content-container").on("click",".blog-delete-blog", function () { 
 	    // 获取 CSRF Token 
-	    var csrfToken = $("meta[name='_csrf']").attr("content");
-	    var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+	    // var csrfToken = $("meta[name='_csrf']").attr("content");
+	    // var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 
 
 	    $.ajax({ 
-	         url: blogUrl, 
+	         url: $(this).attr("blogUrl"),
 	         type: 'DELETE', 
-	         beforeSend: function(request) {
-	             request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-	         },
+	         // beforeSend: function(request) {
+	         //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+	         // },
 	         success: function(data){
-	             if (data.success) {
+	             if (data.code == 1) {
 	                 // 成功后，重定向
-	                 window.location = data.body;
+	                 window.location = data.data;
 	             } else {
 	                 toastr.error(data.message);
 	             }
@@ -47,7 +42,7 @@ $(function() {
 			 data:{"blogId":blogId},
 			 success: function(data){
 				$("#mainContainer").html(data);
-
+				$("#commentSize").text($(".commentDiv").length);
 		     },
 		     error : function() {
 		    	 toastr.error("error!");
@@ -58,23 +53,28 @@ $(function() {
 	// 提交评论
 	$(".blog-content-container").on("click","#submitComment", function () { 
 		// 获取 CSRF Token 
-		var csrfToken = $("meta[name='_csrf']").attr("content");
-		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+		// var csrfToken = $("meta[name='_csrf']").attr("content");
+		// var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		
 		$.ajax({ 
 			 url: '/comments', 
 			 type: 'POST', 
 			 data:{"blogId":blogId, "commentContent":$('#commentContent').val()},
-			 beforeSend: function(request) {
-	             request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-	         },
+			 // beforeSend: function(request) {
+	          //    request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+	         // },
 			 success: function(data){
-				 if (data.success) {
+				 if (data.code == 1) {
 					 // 清空评论框
 					 $('#commentContent').val('');
 					 // 获取评论列表
 					 getCommnet(blogId);
-				 } else {
+				 } else if(data.code == -1){
+                     var node = data.data;
+                     for (var x in node) { // 遍历Map
+                         toastr.error(node[x])
+                     }
+				 }else {
 					 toastr.error(data.message);
 				 }
 		     },
@@ -86,18 +86,19 @@ $(function() {
 
 	// 删除评论
 	$(".blog-content-container").on("click",".blog-delete-comment", function () { 
-		// 获取 CSRF Token 
-		var csrfToken = $("meta[name='_csrf']").attr("content");
-		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+		// 获取 CSRF Token
+		// var csrfToken = $("meta[name='_csrf']").attr("content");
+		// var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		
 		$.ajax({ 
 			 url: '/comments/'+$(this).attr("commentId")+'?blogId='+blogId, 
 			 type: 'DELETE', 
-			 beforeSend: function(request) {
-	             request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-	         },
+             // beforeSend: function(request) {
+	         //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+	         // },
 			 success: function(data){
-				 if (data.success) {
+				 if (data.code == 1) {
+                     toastr.success(data.data);
 					 // 获取评论列表
 					 getCommnet(blogId);
 				 } else {

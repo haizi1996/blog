@@ -1,8 +1,10 @@
 package com.hailin.blog.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
+import com.github.pagehelper.PageHelper;
+import com.hailin.blog.constant.CatalogConstant;
+import com.hailin.blog.constant.SortType;
 import com.hailin.blog.dao.BlogDao;
 import com.hailin.blog.model.Blog;
 import com.hailin.blog.model.Catalog;
@@ -24,20 +26,20 @@ public class BlogServiceImpl implements BlogService {
 
     @Transactional
     @Override
-    public Blog saveBlog(Blog blog) {
-        boolean isNew = (blog.getId() == null);
-        return null;
+    public Integer saveBlog(Blog blog) {
+        return blogDao.saveBlog(blog);
     }
 
     @Transactional
     @Override
-    public void removeBlog(Long id) {
-
+    public Integer updataBlog(Blog blog) {
+        return blogDao.updateBlog(blog);
     }
 
     @Override
     public Blog getBlogById(Long id) {
-        return null;
+        //TODO
+        return blogDao.findBlogById(id , 1);
     }
 
     @Override
@@ -79,5 +81,18 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<Blog> listBlogsByCatalog(Catalog catalog,int pageIndex, int pageSize) {
         return null;
+    }
+
+    @Override
+    public List<Blog> listBlogsByCatalogAndUser(Integer userId, Integer catalogId,
+            CatalogConstant.Status status, SortType sortType , int pageIndex, int pageSize) {
+        return listBlogs( userId, null , catalogId, status, sortType,  pageIndex,  pageSize);
+    }
+
+    @Override
+    public List<Blog> listBlogs(Integer userId, Long blogId, Integer catalogId, CatalogConstant.Status status, SortType sortType ,
+            int pageIndex, int pageSize) {
+        PageHelper.startPage(pageIndex , pageSize);
+        return blogDao.findBlogs(blogId , userId , catalogId , status.getCode() , sortType.getKey());
     }
 }

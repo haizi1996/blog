@@ -1,5 +1,7 @@
 package com.hailin.blog.service;
 
+import com.hailin.blog.constant.CatalogConstant;
+import com.hailin.blog.constant.SortType;
 import com.hailin.blog.model.Blog;
 import com.hailin.blog.model.Catalog;
 import com.hailin.blog.model.User;
@@ -17,14 +19,14 @@ public interface BlogService {
 	 * @param blog
 	 * @return
 	 */
-	Blog saveBlog(Blog blog);
+	Integer saveBlog(Blog blog);
 	
 	/**
-	 * 删除Blog
-	 * @param id
+	 * 更新Blog
+	 * @param blog
 	 * @return
 	 */
-	void removeBlog(Long id);
+	Integer updataBlog(Blog blog);
 	
 	/**
 	 * 根据id获取Blog
@@ -89,4 +91,19 @@ public interface BlogService {
 	 * @return
 	 */
 	void removeVote(Long blogId, Long voteId);
+
+
+	List<Blog> listBlogsByCatalogAndUser(Integer userId , Integer catalogId, CatalogConstant.Status status , SortType sortType , int pageIndex, int pageSize);
+
+	/**
+	 * 根据根据条件进行查询
+	 * @param userId
+	 * @param blogId
+	 * @param catalogId
+	 * @param status
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	List<Blog> listBlogs(Integer userId , Long blogId , Integer catalogId, CatalogConstant.Status status , SortType sortType, int pageIndex, int pageSize);
 }

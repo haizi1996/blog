@@ -1,8 +1,13 @@
 package com.hailin.blog.dto;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+
 public class Response <T>{
 
     //1代表成功返回
+    //0代表失败
+    // -1代表参数错误
     private int code ;
 
     private String message;
@@ -22,8 +27,9 @@ public class Response <T>{
         return data;
     }
 
-    public void setData(T data) {
+    public Response setData(T data) {
         this.data = data;
+        return this;
     }
 
     public Response(int code, T data) {
@@ -51,5 +57,15 @@ public class Response <T>{
 
     public static <T> Response errorResponse(String erroeMessage){
         return new Response(0 , erroeMessage);
+    }
+
+    /**
+     * 错误参数的响应数据
+     * @param erroeMessage
+     * @param <T>
+     * @return
+     */
+    public static <T> Response errorParamterResponse( String erroeMessage , T t){
+        return new Response(-1 , erroeMessage).setData(t);
     }
 }
