@@ -23,7 +23,7 @@ public interface UserDao {
      * @param id
      * @return
      */
-    Integer removeUser(@Param("id") Integer id);
+    Integer removeUser(@Param("id") Integer id , @Param("username") String username);
 
     /**
      * 删除列表里面的用户
@@ -58,7 +58,7 @@ public interface UserDao {
      * @param usernames
      * @return
      */
-    List<User> listUsersByUsernames(Collection<String> usernames);
+    List<User> listUsersByUsernames(@Param("usernames")Collection<String> usernames);
 
 
 

@@ -1,6 +1,7 @@
 package com.hailin.blog.service;
 
 import com.github.pagehelper.PageInfo;
+import com.hailin.blog.enumPackage.RoleEnum;
 import com.hailin.blog.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -14,14 +15,14 @@ public interface UserService extends UserDetailsService {
      * @param user
      * @return
      */
-    Optional<User> saveUser(User user);
+    Optional<User> saveUser(User user , RoleEnum roleEnum);
 
     /**
      * 删除用户
      * @param id
      * @return
      */
-    Integer removeUser(Integer id);
+    Integer removeUser(Integer id , String username);
 
     /**
      * 删除列表里面的用户

@@ -5,6 +5,7 @@ import javax.validation.ConstraintViolationException;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.hailin.blog.constant.BlogConstant;
 import com.hailin.blog.constant.CatalogConstant;
 import com.hailin.blog.constant.SortType;
 import com.hailin.blog.dto.Response;
@@ -148,37 +149,26 @@ public class UserspaceController {
 
 		User  user = (User)userService.loadUserByUsername(username);
 		List<Blog> blogs = Lists.newArrayList();
-		blogs = blogService.listBlogsByCatalogAndUser(user.getId() , catalogId,
-				CatalogConstant.Status.NORMAL ,
-				SortType.parseToSortType(order), pageIndex ,pageSize);
-//		if (catalogId != null && catalogId > 0) { // 分类查询
-//			 blogs = blogService.listBlogsByCatalogAndUser(user.getId() , catalogId, CatalogConstant.Status.NORMAL ,
-//					 SortType.parseToSortType(order), pageIndex ,pageSize);
-//			order = "";
-//		} else if (order.equals("hot")) { // 最热查询
-////			Sort sort = new Sort(Direction.DESC,"readSize","commentSize","voteSize");
-////			Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
-////			page = blogService.listBlogsByTitleVoteAndSort(user, keyword, pageable);
-//			blogs = blogService.listBlogsByCatalogAndUser(user.getId() , catalogId, CatalogConstant.Status.NORMAL , pageIndex ,pageSize);
-//		} else if (order.equals("new")) { // 最新查询
-////			Pageable pageable = new PageRequest(pageIndex, pageSize);
-////			page = blogService.listBlogsByTitleVote(user, keyword, pageable);
-//		}
-
-
-//		List<Blog> list = page.getContent();	// 当前所在页面数据列表
+		// 分类查询
+		if (catalogId != null && catalogId > 0) {
+			 blogs = blogService.listBlogByCatalogAndUser(user.getId() , catalogId, keyword , BlogConstant.Status.NORMAL ,
+					 SortType.parseToSortType(order), pageIndex ,pageSize);
+			order = "";
+			// 最热查询
+		} else if (SortType.HOT.getKey().equals(order)) {
+			blogs = blogService.listBlogsByTitleVoteAndSort(user.getId()  , keyword  , pageIndex ,pageSize);
+			// 最新查询
+		} else if (SortType.NEW.getKey().equals(order)) {
+			blogs = blogService.listBlogsByTitleVote(user.getId() , keyword, pageIndex, pageSize);
+		}
 
 		model.addAttribute("user", user);
-//		model.addAttribute("order", order);
+		model.addAttribute("order", order);
 		model.addAttribute("catalogId", catalogId);
-//		model.addAttribute("keyword", keyword);
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", PageInfo.of(blogs));
 		model.addAttribute("blogList", blogs);
 		return (async==true?"userspace/u :: #mainContainerRepleace":"userspace/u");
 	}
-
-
-
-
 
 }

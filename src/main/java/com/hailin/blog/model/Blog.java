@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 
 
 /**
- * Blog 实体
+ * Bloges 实体
  * 
  */
 public class Blog implements Serializable {
@@ -106,6 +106,9 @@ public class Blog implements Serializable {
 	protected Blog() {
 		// TODO Auto-generated constructor stub
 	}
+
+
+
 	public Blog(String title, String summary,String content) {
 		this.title = title;
 		this.summary = summary;

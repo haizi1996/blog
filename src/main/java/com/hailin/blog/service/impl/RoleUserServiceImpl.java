@@ -24,4 +24,9 @@ public class RoleUserServiceImpl implements RoleUserService {
     public Integer saveUserRole(RoleUser roleUser) {
         return roleUserDao.addUserRole(roleUser);
     }
+
+    @Override
+    public Integer updateUserRole(Integer oldRoleId ,RoleUser roleUser) {
+        return roleUserDao.updateUserRole(oldRoleId , roleUser);
+    }
 }

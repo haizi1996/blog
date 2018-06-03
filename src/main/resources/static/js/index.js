@@ -30,7 +30,7 @@ $(function() {
 				 
 				 // 如果是分类查询，则取消最新、最热选中样式
 				 if (keyword.length > 0) {
-					$(".nav-item .nav-link").removeClass("active");
+                     $(".nav-item .nav-link").removeClass("active");
 				 }
 		     },
 		     error : function() {

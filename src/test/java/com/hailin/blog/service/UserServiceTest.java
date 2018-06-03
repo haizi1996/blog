@@ -11,9 +11,7 @@ import javax.annotation.Resource;
 
 public class UserServiceTest extends BlogApplicationTests{
 
-    static{
-        logger = LoggerFactory.getLogger(UserServiceTest.class);
-    }
+
     @Resource
     private UserService userService;
 

@@ -128,8 +128,8 @@ public class CommentController {
 
         try {
             optionalComment.setStatusEnum(CommentConstant.Status.DELETED).setOperateIp(request.getLocalAddr()).setOperator(principal.getUsername());
-            int rows = commentService.updateComment(optionalComment);
-            return ResponseEntity.ok().body(rows > 0 ? Response.successResponse( "处理成功") : Response.errorResponse("未知原因操作失败"));
+            int rows = commentService.removeComment(optionalComment);
+            return ResponseEntity.ok().body(rows > 0 ? Response.successResponse( "删除评论成功") : Response.errorResponse("未知原因操作失败"));
         } catch (ConstraintViolationException e) {
             return ResponseEntity.ok().body(Response.errorResponse( ConstraintViolationExceptionHandler.getMessage(e)));
         } catch (Exception e) {

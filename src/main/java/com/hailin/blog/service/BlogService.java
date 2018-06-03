@@ -1,5 +1,6 @@
 package com.hailin.blog.service;
 
+import com.hailin.blog.constant.BlogConstant;
 import com.hailin.blog.constant.CatalogConstant;
 import com.hailin.blog.constant.SortType;
 import com.hailin.blog.model.Blog;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 /**
- * Blog 服务接口.
+ * Bloges 服务接口.
  * 
  */
 public interface BlogService {
@@ -34,27 +35,27 @@ public interface BlogService {
 	 * @return
 	 */
 	Blog getBlogById(Long id);
-	
-	/**
-	 * 根据用户名进行分页模糊查询（最新）
-	 * @param user
-	 * @return
-	 */
-	List<Blog> listBlogsByTitleVote(User user, String title);
- 
-	/**
-	 * 根据用户名进行分页模糊查询（最热）
-	 * @param user
-	 * @return
-	 */
-	List<Blog> listBlogsByTitleVoteAndSort(User user, String title);
 
 	/**
-	 * 根据分类进行查询
-	 * @param catalog
+	 * 根据用户名进行分页模糊查询（最新）
+	 * @param userId
+	 * @param keyword
+	 * @param pageIndex
+	 * @param pageSize
 	 * @return
 	 */
-    List<Blog> listBlogsByCatalog(Catalog catalog, int pageIndex, int pageSize);
+	List<Blog> listBlogsByTitleVote(Integer userId, String keyword , Integer pageIndex , Integer pageSize);
+
+	/**
+	 * 根据用户名进行分页模糊查询（最热）
+	 * @param userId
+	 * @param keyword
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	List<Blog> listBlogsByTitleVoteAndSort(Integer userId, String keyword , Integer pageIndex , Integer pageSize);
+
 	/**
 	 * 阅读量递增
 	 * @param id
@@ -77,12 +78,7 @@ public interface BlogService {
 	 */
 	void removeComment(Long blogId, Long commentId);
 	
-	/**
-	 * 点赞
-	 * @param blogId
-	 * @return
-	 */
-	Blog createVote(Long blogId);
+
 	
 	/**
 	 * 取消点赞
@@ -93,17 +89,29 @@ public interface BlogService {
 	void removeVote(Long blogId, Long voteId);
 
 
-	List<Blog> listBlogsByCatalogAndUser(Integer userId , Integer catalogId, CatalogConstant.Status status , SortType sortType , int pageIndex, int pageSize);
+	/**
+	 * 根据分类进行查询
+	 * @param userId
+	 * @param catalogId
+	 * @param keyword
+	 * @param status
+	 * @param sortType
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	List<Blog> listBlogByCatalogAndUser(Integer userId , Integer catalogId, String keyword ,  BlogConstant.Status status , SortType sortType , int pageIndex, int pageSize);
 
 	/**
 	 * 根据根据条件进行查询
 	 * @param userId
 	 * @param blogId
+	 * @param keyword
 	 * @param catalogId
 	 * @param status
 	 * @param pageIndex
 	 * @param pageSize
 	 * @return
 	 */
-	List<Blog> listBlogs(Integer userId , Long blogId , Integer catalogId, CatalogConstant.Status status , SortType sortType, int pageIndex, int pageSize);
+	List<Blog> listBlogs(Integer userId , Long blogId , String  keyword, Integer catalogId, BlogConstant.Status status , SortType sortType, int pageIndex, int pageSize);
 }

@@ -77,12 +77,26 @@
 
   </select>
 
-  <update id="removeUser" parameterType="java.lang.Long">
-    UPDATE `user` SET status = 0 WHERE  id = #{id}
+  <update id="removeUser" >
+    UPDATE `user` SET status = 0 WHERE  id = #{id} and username = #{username}
   </update>
 
   <insert id="saveUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO `user` (id ,name , username , password , email , imageUrl ) VALUES (#{id},#{name} , #{username} , #{password} , #{email}, #{imageUrl})
+    INSERT INTO `user` (id ,name , username , password , email , imageUrl
+    <if test="operator != null">
+      ,operator
+    </if>
+    <if test="operateIp != null">
+      ,operate_ip
+    </if>
+    ) VALUES (#{id},#{name} , #{username} , #{password} , #{email}, #{imageUrl}
+    <if test="operator != null">
+      , #{operator}
+    </if>
+    <if test="operateIp != null">
+     , #{operateIp}
+    </if>
+    )
   </insert>
 
   <update id="updateUser" parameterType="user" >
@@ -119,10 +133,10 @@
   </update>
 
   <select id="getUserById" resultMap="queryResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="user_Column_List" />
-    from user
-    where id = #{id,jdbcType=INTEGER}
+    SELECT <include refid="user_Column_List" /> , <include refid="role_column_List" />   FROM `user`
+    LEFT JOIN `role_user` ON `user`.id = `role_user`.user_id
+    LEFT JOIN `role` ON `role_user`.role_id = `role`.id
+    where `user`.id = #{id,jdbcType=INTEGER}
   </select>
 
   <update id="removeUsersInBatch" parameterType="java.util.List" >
@@ -133,11 +147,15 @@
     </foreach>
   </update>
   <select id="listUsersByUsernames" parameterType="java.util.Collection" resultType="user">
-    SELECT <include refid="Base_Column_List" /> FROM USER where username IN
-    <foreach collection="usernames" open="(" separator="," close=")" item="username">
-      #{username}
-    </foreach>
-  </select>
+    SELECT <include refid="Base_Column_List" /> FROM USER
+    <if test="usernames != null and usernames.size() > 0">
+      where username IN
+      <foreach collection="usernames" open="(" separator="," close=")" item="username">
+        #{username}
+      </foreach>
+    </if>
+
+</select>
   <select id="findByUsername" parameterType="java.lang.String" resultType="user">
     SELECT <include refid="Base_Column_List"/> FROM `user`
     <where>
@@ -149,7 +167,7 @@
       </if>
     </where>
   </select>
-  <select id="findUserDetailsByUsername" resultMap="queryResultMap" resultType="user" >
+  <select id="findUserDetailsByUsername" resultMap="queryResultMap"  >
     SELECT <include refid="user_Column_List" /> , <include refid="role_column_List" />   FROM `user`
     LEFT JOIN `role_user` ON `user`.id = `role_user`.user_id
     LEFT JOIN `role` ON `role_user`.role_id = `role`.id

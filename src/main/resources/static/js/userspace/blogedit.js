@@ -22,19 +22,17 @@ $(function() {
         
     $('.form-control-chosen').chosen();
 
-    // 初始化标签
-    // $('.form-control-tag').tagsInput({
-    //     'defaultText':'输入标签'
-    // });
-
-    // 初始化标签控件
-    $('.form-control-tag').tagEditor({
-        initialTags: [],
-        maxTags: 5,
-        delimiter: ', ',
-        forceLowercase: false,
-        animateDelete: 0,
-        placeholder: '请输入标签'
+    //初始化标签
+    $('.form-control-tag').tagsInput({
+        'defaultText':'输入标签',
+        'height':'100px', //设置高度
+        'width':'300px',  //设置宽度
+        'interactive':true, //是否允许添加标签，false为阻止
+        'removeWithBackspace' : true, //是否允许使用退格键删除前面的标签，false为阻止
+        'delimiter': ', ',
+        'minChars' : 0, //每个标签的小最字符
+        'maxChars' : 0 ,//每个标签的最大字符，如果不设置或者为0，就是无限大
+        'placeholderColor' : '#666666' //设置defaultText的颜色
     });
 
 
@@ -96,8 +94,16 @@ $(function() {
                  toastr.error("error!");
              }
         })
-    })
-    
+    });
+    // // 初始化标签控件
+    // $('.form-control-tag').tagEditor({
+    //     initialTags: [],
+    //     maxTags: 5,
+    //     delimiter: ', ',
+    //     forceLowercase: false,
+    //     animateDelete: 0,
+    //     placeholder: '请输入标签'
+    // });
 
 
 });

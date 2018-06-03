@@ -2,6 +2,7 @@ package com.hailin.blog.model;
 
 import com.hailin.blog.enumPackage.RoleEnum;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public class RoleUser {
@@ -67,8 +68,9 @@ public class RoleUser {
         return operateIp;
     }
 
-    public void setOperateIp(String operateIp) {
+    public RoleUser setOperateIp(String operateIp) {
         this.operateIp = operateIp;
+        return this;
     }
 
     @Override
@@ -88,11 +90,24 @@ public class RoleUser {
      * 创建一个普通博主角色对应关系
      * @return
      */
-    public static RoleUser createBolgerRole(Integer userId){
+    public static RoleUser createRoleUser(Integer userId){
+
+        return createRoleUser(userId ,RoleEnum.BLOGER );
+    }
+
+    /**
+     * 创建一个对应角色对应关系
+     * @return
+     */
+    public static RoleUser createRoleUser(Integer userId , RoleEnum  roleEnum){
         RoleUser roleUser = new RoleUser();
         roleUser.setUserId(userId);
-        roleUser.setRoleId(RoleEnum.BLOGER.getRoleId());
+        roleUser.setRoleId(roleEnum.getRoleId());
         return roleUser;
+    }
 
+    public RoleUser getParameterFromRequest(HttpServletRequest request){
+        this.setOperateIp(request.getLocalAddr());
+        return this;
     }
 }

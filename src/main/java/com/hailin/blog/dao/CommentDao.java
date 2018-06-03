@@ -17,8 +17,6 @@ public interface CommentDao {
     Integer updataComment(Comment comment);
 
 
-    Integer removeComment(@Param("commentId") Long commentId);
-
     /**
      * 保存评论
      * @return

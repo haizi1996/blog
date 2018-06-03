@@ -117,21 +117,24 @@ $(function() {
 	// 提交点赞
 	$(".blog-content-container").on("click","#submitVote", function () { 
 		// 获取 CSRF Token 
-		var csrfToken = $("meta[name='_csrf']").attr("content");
-		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+		// var csrfToken = $("meta[name='_csrf']").attr("content");
+		// var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		
 		$.ajax({ 
 			 url: '/votes', 
 			 type: 'POST', 
 			 data:{"blogId":blogId},
-			 beforeSend: function(request) {
-	             request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-	         },
+             // beforeSend: function(request) {
+	         //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+	         // },
 			 success: function(data){
-				 if (data.success) {
-					 toastr.info(data.message);
+                 if (data.code == 1) {
+                     toastr.success(data.data);
 						// 成功后，重定向
-					 window.location = blogUrl;
+                     setTimeout(function(){
+                         //所有的逻辑
+                         window.location = blogUrl;
+                     },500);
 				 } else {
 					 toastr.error(data.message);
 				 }
@@ -151,14 +154,17 @@ $(function() {
 		$.ajax({ 
 			 url: '/votes/'+$(this).attr('voteId')+'?blogId='+blogId, 
 			 type: 'DELETE', 
-			 beforeSend: function(request) {
-	             request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-	         },
+             // beforeSend: function(request) {
+	         //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+	         // },
 			 success: function(data){
-				 if (data.success) {
-					 toastr.info(data.message);
-					// 成功后，重定向
-					 window.location = blogUrl;
+				 if (data.code == 1) {
+                     toastr.success(data.data);
+                     // 成功后，重定向
+                     setTimeout(function(){
+                         //所有的逻辑
+                         window.location = blogUrl;
+                     },500);
 				 } else {
 					 toastr.error(data.message);
 				 }

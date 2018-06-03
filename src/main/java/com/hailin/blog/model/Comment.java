@@ -16,7 +16,9 @@ import javax.validation.constraints.Size;
 public class Comment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Long id; // 用户的唯一标识
+	private Long id;
+
+	private Long blogId ;
 
 	@Size(min=2, max=500,message = "评论字数限制在2到500之间")
 	private String content;
@@ -131,4 +133,12 @@ public class Comment implements Serializable {
 		return comment;
 	}
 
+	public Long getBlogId() {
+		return blogId;
+	}
+
+	public Comment setBlogId(Long blogId) {
+		this.blogId = blogId;
+		return this;
+	}
 }

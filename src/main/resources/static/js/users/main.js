@@ -1,8 +1,6 @@
 /*!
  * Bolg main JS.
  * 
- * @since: 1.0.0 2017/3/9
- * @author Way Lau <https://waylau.com>
  */
 "use strict";
 //# sourceURL=main.js
@@ -15,7 +13,7 @@ $(function() {
     // 根据用户名、页面索引、页面大小获取用户列表
     function getUersByName(pageIndex, pageSize) {
          $.ajax({ 
-             url: "/users", 
+             url: "/users/list",
              contentType : 'application/json',
              data:{
                  "async":true, 
@@ -78,7 +76,7 @@ $(function() {
              success: function(data){
                  $('#userForm')[0].reset();  
 
-                 if (data.success) {
+                 if (data.code == 1) {
                      // 从新刷新主界面
                      getUersByName(0, _pageSize);
                  } else {
@@ -96,10 +94,10 @@ $(function() {
     $("#rightContainer").on("click",".blog-delete-user", function () { 
 
         $.ajax({ 
-             url: "/users/" + $(this).attr("userId") , 
+             url: "/users/" + $(this).attr("userId") + "/" + $(this).attr("username") ,
              type: 'DELETE', 
              success: function(data){
-                 if (data.success) {
+                 if (data.code == 1) {
                      // 从新刷新主界面
                      getUersByName(0, _pageSize);
                  } else {

@@ -1,11 +1,14 @@
 package com.hailin.blog.constant;
 
+/**
+ * 排序枚举
+ */
 public enum  SortType {
 
     NONE(null , "无"),
 
-    NEW("new" , "最热排序"),
-    HOT("hot" , "最新排序");
+    NEW("new" , "最新排序"),
+    HOT("hot" , "最热排序");
 
 
 

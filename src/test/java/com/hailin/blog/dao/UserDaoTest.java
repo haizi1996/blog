@@ -14,20 +14,10 @@ public class UserDaoTest extends BlogApplicationTests {
     @Resource
     private UserDao userDao;
 
-    static {
-        logger = LoggerFactory.getLogger(UserDaoTest.class);
-    }
-
 
     @Test
     public void saveUser() {
-        User user = new User();
-        user.setName("李三");
-        user.setUsername("lisan");
-        user.setEmail("1051956253@qq.com");
-        user.setPassword("123456");
-        logger.info("reslut={}",userDao.saveUser(user));
-        logger.info("reslut userId={}",user.getId());
+
     }
 
     @Test

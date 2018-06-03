@@ -8,9 +8,9 @@ package com.hailin.blog.enumPackage;
  */
 public enum  RoleEnum {
 
-    ADMIN(0 , "管理员"),
 
-    BLOGER(1 , "普通博主");
+    BLOGER(1 , "普通博主"),
+    ADMIN(2 , "管理员");
     private int roleId ;
 
     private String desc;
@@ -35,5 +35,17 @@ public enum  RoleEnum {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+
+    public static RoleEnum parse(Integer roleId){
+        switch (roleId){
+            case 1:
+                return BLOGER;
+            case 2:
+                return ADMIN;
+                default:
+                    return BLOGER;
+        }
     }
 }

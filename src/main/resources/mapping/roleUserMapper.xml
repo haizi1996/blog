@@ -9,15 +9,38 @@
 
   <insert id="addUserRole" parameterType="roleUser" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO `role_user` (role_id , user_id
-     <if test="roleUser.operateIp != null">
+     <if test="operateIp != null">
        ,operate_ip
      </if>
-     ) VALUES ( #{roleUser.roleId}, #{roleUser.userId}
-    <if test="roleUser.operateIp != null">
-      ,roleUser.operateIp
+      <if test="operator != null">
+          ,operator
+      </if>
+     ) VALUES ( #{roleId}, #{userId}
+    <if test="operateIp != null">
+      ,#{operateIp}
     </if>
+      <if test="operator != null">
+          ,#{operator}
+      </if>
     )
   </insert>
+
+    <update id="updateUserRole" >
+        update `role_user`
+        <set>
+            role_id = #{roleUser.roleId},
+            <if test="roleUser.operator != null">
+                operator = #{roleUser.operator},
+            </if>
+            <if test="roleUser.operateIp != null">
+                operate_ip = #{roleUser.operateIp},
+            </if>
+            operate_time = now()
+        </set>
+        <where>
+            role_id = #{oldRoleId} and user_id = #{roleUser.userId}
+        </where>
+    </update>
 
 
 

@@ -11,4 +11,7 @@ public interface RoleUserService {
      */
     Integer saveUserRole(RoleUser roleUser);
 
+
+    Integer updateUserRole(Integer oldRoleId , RoleUser roleUser);
+
 }

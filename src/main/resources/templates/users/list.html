@@ -42,12 +42,12 @@
 					<div>
 						<a class="blog-edit-user" data-toggle="modal"
                            data-target="#flipFlop" role="button"
-                           data-th-attr="userId=${user.id}"> <i
-                                class="fa fa-pencil-square-o" aria-hidden="true"></i>
-						</a> <a class="blog-delete-user" role="button"
-                                data-th-attr="userId=${user.id}"> <i class="fa fa-times"
-                                                                     aria-hidden="true"></i>
-					</a>
+                           data-th-attr="userId=${user.id}">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+						</a>
+                        <a class="blog-delete-user" role="button" th:attr="userId=${user.id},username=${user.username}">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+					    </a>
 					</div>
 				</td>
 			</tr>

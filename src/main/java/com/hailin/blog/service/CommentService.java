@@ -14,6 +14,7 @@ public interface CommentService {
 	/**
 	 * 根据id获取 Comment
 	 * @param id
+	 * @param status
 	 * @return
 	 */
 	Comment getCommentById(Long id , CommentConstant.Status status);
@@ -21,6 +22,7 @@ public interface CommentService {
 
 	/**
 	 * 获取 Comment集合
+	 * @param status
 	 * @return
 	 */
 	List<Comment> getComment(Long blogId , CommentConstant.Status status);
@@ -39,10 +41,10 @@ public interface CommentService {
 
 	/**
 	 * 删除评论
-	 * @param commentId
+	 * @param comment
 	 * @return
 	 */
-	Integer removeComment(Long commentId);
+	Integer removeComment(Comment comment);
 
 	/**
 	 * 更新评论

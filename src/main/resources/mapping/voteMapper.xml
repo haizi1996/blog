@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hailin.blog.dao.VoteDao" >
+  <resultMap id="BaseResultMap" type="com.hailin.blog.model.Vote" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="blog_Id" property="blogId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="queryResultMap" type="com.hailin.blog.model.Vote" extends="BaseResultMap">
+    <association property="user" javaType="com.hailin.blog.model.User" >
+      <id column="user_id" property="id" jdbcType="INTEGER" />
+      <result column="user_username" property="username" jdbcType="VARCHAR" />
+      <result column="user_name" property="name" jdbcType="VARCHAR" />
+      <result column="user_password" property="password" jdbcType="VARCHAR" />
+      <result column="user_email" property="email" jdbcType="VARCHAR" />
+      <result column="user_imageUrl" property="imageUrl" jdbcType="VARCHAR" />
+      <result column="user_remark" property="remark" jdbcType="VARCHAR" />
+      <result column="user_status" property="status" jdbcType="INTEGER" />
+      <result column="user_userGroup_Id" property="userGroupId" jdbcType="INTEGER" />
+      <result column="user_operator" property="operator" jdbcType="VARCHAR" />
+      <result column="user_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="user_operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+      <result column="user_last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+      <result column="user_last_modify_password_Time" property="lastModifyPasswordTime" jdbcType="TIMESTAMP" />
+      <result column="operate_ip" property="operateIp" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  
+  <sql id="Base_Vote_List" >
+    id, content , status  , operator , create_time,operate_time , operate_ip
+  </sql>
+
+  <sql id="vote_column_List">
+    `vote`.id, `vote`.blog_Id ,  `vote`.status  , `vote`.operator , `vote`.create_Time, `vote`.operate_Time , `vote`.operate_Ip
+  </sql>
+  <sql id="user_column_List">
+    `user`.id user_id, `user`.name user_name, `user`.username user_username, `user`.password user_password, `user`.email user_email , `user`.imageurl user_imageUrl, `user`.status user_status, `user`.remark user_remark , `user`.userGroup_Id user_userGroup_Id, `user`.operator user_operator , `user`.create_Time user_create_time, `user`.operate_Time user_operate_Time , `user`.last_Login_Time user_last_Login_Time, `user`.last_Modify_Password_Time user_last_Modify_Password_Time , `user`.operate_Ip user_operate_Ip
+  </sql>
+
+  <insert id="saveVote" keyColumn="id" useGeneratedKeys="true" parameterType="vote">
+    INSERT INTO `vote` (  user_id , blog_id, operator , operate_Ip ) VALUES (  #{userId}  , #{blogId}, #{vote.operator} , #{vote.operateIp});
+  </insert>
+
+  <select id="findVoteById"  resultMap="queryResultMap">
+    SELECT <include refid="vote_column_List" /> , <include refid="user_column_List"/> FROM
+    `vote` LEFT JOIN `user` ON `vote`.user_id = `user`.id
+    <where>
+      <if test="voteId != null">
+        AND `vote`.id = #{voteId}
+      </if>
+      <if test="voteStatus != null" >
+        AND `vote`.status = #{voteStatus}
+      </if>
+    </where>
+  </select>
+
+  <update id="updateVote" parameterType="vote" >
+    UPDATE `vote`
+    <set>
+      <if test="status != null">
+         status = #{status},
+      </if>
+      <if test="operateIp != null" >
+        operate_Ip = #{operateIp},
+      </if>
+      <if test="operator != null">
+        operator = #{operator},
+      </if>
+      operate_Time = now()
+    </set>
+    <where>
+      id = #{id}
+    </where>
+
+  </update>
+</mapper>

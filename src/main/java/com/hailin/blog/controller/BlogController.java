@@ -3,11 +3,10 @@ package com.hailin.blog.controller;
 
 import com.hailin.blog.constant.CatalogConstant;
 import com.hailin.blog.dto.Response;
-import com.hailin.blog.model.Blog;
-import com.hailin.blog.model.Catalog;
-import com.hailin.blog.model.User;
+import com.hailin.blog.model.*;
 import com.hailin.blog.service.BlogService;
 import com.hailin.blog.service.CatalogService;
+import com.hailin.blog.service.EsBlogService;
 import com.hailin.blog.service.UserService;
 import com.hailin.blog.utils.BindingResultUtil;
 import com.hailin.blog.utils.ConstraintViolationExceptionHandler;
@@ -16,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,12 +45,9 @@ public class BlogController {
     @Resource
     private CatalogService catalogService;
 
-//    @GetMapping("/list")
-//    public String listBlogs(@RequestParam(value="order",required=false,defaultValue="new") String order,
-//                            @RequestParam(value="tag",required=false) Long tag) {
-//        System.out.print("order:" +order + ";tag:" +tag );
-//        return "redirect:/index?order="+order+"&tag="+tag;
-//    }
+    @Resource
+    private EsBlogService esBlogService;
+
     /**
      * 获取新增博客的界面
      * @param model
@@ -107,13 +104,13 @@ public class BlogController {
             // 判断是修改还是新增
             if (blog.getId()!=null) {
                 blog.setOperator(username).setOperateIp(request.getLocalAddr());
-                blogService.saveBlog(blog);
+                blogService.updataBlog(blog);
             } else {
                 User user = (User)userService.loadUserByUsername(username);
                 blog.setUser(user);
                 blogService.saveBlog(blog);
             }
-
+            esBlogService.updateEsBlog(EsBlog.of(blogService.getBlogById(blog.getId())));
         } catch (ConstraintViolationException e)  {
             return ResponseEntity.ok().body(Response.errorResponse( ConstraintViolationExceptionHandler.getMessage(e)));
         } catch (Exception e) {
@@ -137,6 +134,7 @@ public class BlogController {
     	    try {
     	        Blog blog = Blog.buildDeleteBlog(id , request).setOperator(username);
     			rows = blogService.updataBlog(blog);
+    			esBlogService.removeEsBlog(esBlogService.getEsBlogByBlogId(id).getId());
     		} catch (Exception e) {
     			return ResponseEntity.ok().body(Response.errorResponse(e.getMessage()));
     		}
@@ -160,8 +158,10 @@ public class BlogController {
     public String getBlogById(@PathVariable("username") String username,@PathVariable("id") Long id, Model model) {
         User principal = null;
         Blog blog = blogService.getBlogById(id);
-        if(blog != null){
-            blog.setCommentSize(blog.getComments() != null ?blog.getComments().size() : 0);
+        if(blog != null && blog.getComments() != null){
+            blog.setCommentSize(blog.getComments().size() );
+        }else if(blog == null){
+            return "userspace/blog";
         }
         // 判断操作用户是否是博客的所有者
         boolean isBlogOwner = false;
@@ -178,21 +178,22 @@ public class BlogController {
             blogService.readingIncrease(id);
         }
 
-//        // 判断操作用户的点赞情况
-//        List<Vote> votes = blog.getVotes();
-//        Vote currentVote = null; // 当前用户的点赞情况
-//
-//        if (principal !=null) {
-//            for (Vote vote : votes) {
-//                vote.getUser().getUsername().equals(principal.getUsername());
-//                currentVote = vote;
-//                break;
-//            }
-//        }
+        // 判断操作用户的点赞情况
+        List<Vote> votes = blog.getVotes();
+        Vote currentVote = null; // 当前用户的点赞情况
+
+        if (principal !=null && !CollectionUtils.isEmpty(votes)) {
+            for (Vote vote : votes) {
+                vote.getUser().getUsername().equals(principal.getUsername());
+                currentVote = vote;
+                break;
+            }
+            blog.setVoteSize(votes.size());
+        }
 
         model.addAttribute("isBlogOwner", isBlogOwner);
         model.addAttribute("blogModel",blog);
-//        model.addAttribute("currentVote",currentVote);
+        model.addAttribute("currentVote",currentVote);
 
         return "userspace/blog";
     }

@@ -10,10 +10,10 @@
 
     <div class="row">
 
-        <!-- Blog Entries Column -->
+        <!-- Bloges Entries Column -->
         <div class="col-md-8">
 
-            <!-- Blog Post -->
+            <!-- Bloges Post -->
             <div class="card mb-4">
                 <div class="card-block">
                     <h2 class="card-title">
@@ -23,7 +23,7 @@
 			                  </a>
 					        </span>
                         <a href="/u/waylau/blogs/1" class="card-link" title="waylau" 
-                        	th:href="'/u/' + ${blogModel.user.username} + '/blogs/'+ ${blogModel.id}"  th:title="${blogModel.user.username}" th:text="${blogModel.title}">
+                        	th:href="'/blog/' + ${blogModel.user.username} + '/show/'+ ${blogModel.id}"  th:title="${blogModel.user.username}" th:text="${blogModel.title}">
                             OAuth 2.0 认证的原理与实践
                         </a>
                     </h2>
@@ -116,7 +116,7 @@
 <!-- JavaScript -->
 <script th:inline="javascript">
 var blogId = [[${blogModel.id}]];
-var blogUrl = '/u/' + [[${blogModel.user.username}]] + '/blogs/'+ [[${blogModel.id}]] ;
+var blogUrl =  '/blog/'+ [[${blogModel.user.username}]] + '/show/'+ [[${blogModel.id}]] ;
 </script>
 <script src="../../js/userspace/blog.js" th:src="@{/js/userspace/blog.js}"></script>
 </body>

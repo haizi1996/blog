@@ -41,9 +41,27 @@ public interface BlogDao {
      * 根据条件查询博客列表
      * @param blogId
      * @param userId
+     * @param keyword
      * @param catalogId
      * @param status
+     * @param sortType
      * @return
      */
-    List<Blog> findBlogs(@Param("blogId") Long blogId ,  @Param("userId") Integer userId , @Param("catalogId") Integer catalogId ,@Param("status") Integer status , @Param("sortType") String sortType);
+    List<Blog> findBlogs(@Param("blogId") Long blogId ,  @Param("userId") Integer userId , @Param("keyword") String keyword , @Param("catalogId") Integer catalogId ,@Param("status") Integer status , @Param("sortType") String sortType);
+
+
+    /**
+     * 某个统计数量加一
+     * @param blogId
+     * @param type
+     */
+    void countNumberIncrease(@Param("blogId") Long blogId , @Param("type") String type);
+    /**
+     * 某个统计数量减一
+     * @param blogId
+     * @param type
+     */
+    void countNumberReduce(@Param("blogId") Long blogId , @Param("type") String type);
+
+
 }

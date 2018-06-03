@@ -3,6 +3,7 @@
 <mapper namespace="com.hailin.blog.dao.CommentDao" >
   <resultMap id="BaseResultMap" type="com.hailin.blog.model.Comment" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="blog_Id" property="blogId" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
@@ -32,12 +33,9 @@
   </resultMap>
   
   
-  <sql id="Base_Column_List" >
-    id, content , status  , operator , create_time,operate_time , operate_ip
-  </sql>
 
   <sql id="comment_Column_List">
-    `comment`.id, `comment`.content , `comment`.status  , `comment`.operator , `comment`.create_Time, `comment`.operate_Time , `comment`.operate_Ip
+    `comment`.id, `comment`.blog_Id , `comment`.content , `comment`.status  , `comment`.operator , `comment`.create_Time, `comment`.operate_Time , `comment`.operate_Ip
   </sql>
   <sql id="user_column_List">
     `user`.id user_id, `user`.name user_name, `user`.username user_username, `user`.password user_password, `user`.email user_email , `user`.imageurl user_imageUrl, `user`.status user_status, `user`.remark user_remark , `user`.userGroup_Id user_userGroup_Id, `user`.operator user_operator , `user`.create_Time user_create_time, `user`.operate_Time user_operate_Time , `user`.last_Login_Time user_last_Login_Time, `user`.last_Modify_Password_Time user_last_Modify_Password_Time , `user`.operate_Ip user_operate_Ip

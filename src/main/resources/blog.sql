@@ -3,10 +3,10 @@ use blog;
 create table `user`(
   id INT PRIMARY KEY AUTO_INCREMENT ,
   name VARCHAR(20) NOT NULL COMMENT '别名',
-  username VARCHAR(20) UNIQUE COMMENT '用户名',
+  username VARCHAR(20) NOT NULL COMMENT '用户名',
   password VARCHAR(40) NOT NULL COMMENT '加密后的密码',
   email VARCHAR(20) NOT NULL COMMENT '邮件',
-  imageUrl VARCHAR(50) DEFAULT NULL COMMENT '头像地址',
+  imageUrl VARCHAR(100) DEFAULT NULL COMMENT '头像地址',
   remark VARCHAR(100) NOT NULL DEFAULT '这个人很懒，什么都没留下' COMMENT '备注',
   status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,1:正常状态 , 0代表冻结状态，2代表删除',
   userGroup_Id INT NOT NULL DEFAULT 1 COMMENT '用户组',
@@ -182,5 +182,16 @@ CREATE TABLE `comment`(
   operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
   status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,0:删除,1:正常'
 )ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '评论表';
+
+CREATE table `vote`(
+  id INT PRIMARY KEY AUTO_INCREMENT ,
+  user_id INT NOT NULL DEFAULT 0 COMMENT '用户ID',
+  blog_id bigint NOT NULL DEFAULT 0 COMMENT '博文ID',
+  operator VARCHAR(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  create_time DATETIME NOT NULL DEFAULT now() COMMENT '创建时间',
+  operate_time DATETIME NULL DEFAULT now() COMMENT '最后操作时间',
+  operate_ip VARCHAR(20) NOT NULL DEFAULT '' COMMENT '最后一次操作的ip',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态,0:删除,1:正常'
+)ENGINE = innodb AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8 COMMENT '点赞表';
 
 
