@@ -104,6 +104,7 @@ public class BlogController {
             // 判断是修改还是新增
             if (blog.getId()!=null) {
                 blog.setOperator(username).setOperateIp(request.getLocalAddr());
+                esBlogService.removeEsBlog(esBlogService.getEsBlogByBlogId(blog.getId()).getId());
                 blogService.updataBlog(blog);
             } else {
                 User user = (User)userService.loadUserByUsername(username);
@@ -133,10 +134,10 @@ public class BlogController {
     		int rows = 0;
     	    try {
     	        Blog blog = Blog.buildDeleteBlog(id , request).setOperator(username);
-    			rows = blogService.updataBlog(blog);
+    	        rows = blogService.updataBlog(blog);
     			esBlogService.removeEsBlog(esBlogService.getEsBlogByBlogId(id).getId());
     		} catch (Exception e) {
-    			return ResponseEntity.ok().body(Response.errorResponse(e.getMessage()));
+    			return ResponseEntity.ok().body(Response.errorResponse("删除博文失败"));
     		}
             Response response = null;
     	    if (rows > 0){

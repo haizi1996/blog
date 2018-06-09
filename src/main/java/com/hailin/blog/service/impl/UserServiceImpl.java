@@ -76,14 +76,14 @@ public class UserServiceImpl implements UserService  {
     }
 
     @Override
-    public PageInfo<User> listUsers( Integer pageNum , Integer pageSize , int status) {
-        return listUserAndRolesByNameLike(null , pageNum , pageSize , status);
+    public PageInfo<User> listUsers( Integer pageNum , RoleEnum roleEnum, Integer pageSize , Integer status) {
+        return listUserAndRolesByNameLike(null , roleEnum, pageNum , pageSize , status);
     }
 
     @Override
-    public PageInfo<User> listUserAndRolesByNameLike(String name, Integer pageNum , Integer pageSize , int status) {
+    public PageInfo<User> listUserAndRolesByNameLike(String name, RoleEnum roleEnum, Integer pageNum , Integer pageSize , int status) {
         PageHelper.startPage(pageNum,pageSize);
-        List<User> users = userDao.listUserAndRolesByNameLike(name , status);
+        List<User> users = userDao.listUserAndRolesByNameLike(name ,roleEnum== null ? null : roleEnum.getRoleId() , status);
         if(CollectionUtils.isEmpty(users)){
             users = Lists.newArrayList();
         }

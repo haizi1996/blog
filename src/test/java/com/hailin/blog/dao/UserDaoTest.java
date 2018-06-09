@@ -43,7 +43,7 @@ public class UserDaoTest extends BlogApplicationTests {
     @Test
     public void listUserAndRolesByNameLike() {
         String name = "张";
-        List<User> users = userDao.listUserAndRolesByNameLike(name ,  1);
+        List<User> users = userDao.listUserAndRolesByNameLike(name , null,  1);
         users.stream().forEach(user -> logger.info(user.toString()));
 
 

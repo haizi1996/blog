@@ -61,8 +61,8 @@ $(function() {
 		    	var imageUrl = data;
 		    	
 				// 获取 CSRF Token 
-				// var csrfToken = $("meta[name='_csrf']").attr("content");
-				// var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+				var csrfToken = $("meta[name='_csrf']").attr("content");
+				var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		    	// 保存头像更改到数据库
 				$.ajax({ 
 					 url: avatarApi, 
@@ -71,7 +71,7 @@ $(function() {
 					 data: JSON.stringify({"id":Number($("#userId").val()), 
 						 	"imageUrl":imageUrl}),
                      // beforeSend: function(request) {
-		             //     request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
+		              //    request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token
 		             // },
 					 success: function(data){
 						 if (data.code == 1) {

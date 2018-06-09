@@ -57,7 +57,7 @@ public interface UserService extends UserDetailsService {
      * 获取用户列表
      * @return
      */
-    PageInfo<User> listUsers(Integer pageNum , Integer pageSize , int status);
+    PageInfo<User> listUsers(Integer pageNum , RoleEnum roleEnum, Integer pageSize , Integer status);
 
     /**
      * 根据用户名进行分页模糊查询
@@ -65,7 +65,7 @@ public interface UserService extends UserDetailsService {
      * @param status
      * @return
      */
-    PageInfo<User> listUserAndRolesByNameLike(String name , Integer pageNum , Integer pageSize ,int status);
+    PageInfo<User> listUserAndRolesByNameLike(String name , RoleEnum roleEnum, Integer pageNum , Integer pageSize ,int status);
 
     /**
      * 根据名称列表查询

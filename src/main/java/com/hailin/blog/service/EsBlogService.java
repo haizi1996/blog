@@ -75,4 +75,9 @@ public interface EsBlogService {
      * @return
      */
     List<User> listTop12Users();
+
+    /**
+     * 删除所有
+     */
+    void removeAll();
 }

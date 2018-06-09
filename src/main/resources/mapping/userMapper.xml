@@ -63,9 +63,13 @@
   </sql>
 
   <select id="listUserAndRolesByNameLike" parameterType="java.lang.String" resultMap="queryResultMap">
-      SELECT <include refid="user_Column_List" /> , <include refid="role_column_List" />   FROM `user`
+    SELECT <include refid="user_Column_List" /> , <include refid="role_column_List" />   FROM `user`
     LEFT JOIN `role_user` ON `user`.id = `role_user`.user_id
-    LEFT JOIN `role` ON `role_user`.role_id = `role`.id
+    INNER JOIN `role` ON `role_user`.role_id = `role`.id
+    <if test="roleId != null">
+      and `role`.id = #{roleId}
+    </if>
+
     <where>
       <if test="name != null and name.length()>0">
         AND `user`.`name` LIKE concat('%' , #{name} , '%')

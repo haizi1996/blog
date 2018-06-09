@@ -49,9 +49,11 @@ public interface UserDao {
     /**
      * 根据用户名进行分页模糊查询
      * @param name
+     * @param roleId
+     * @param status
      * @return
      */
-    List<User> listUserAndRolesByNameLike(@Param("name") String name , @Param("status") int status);
+    List<User> listUserAndRolesByNameLike(@Param("name") String name , @Param("roleId") Integer roleId , @Param("status") int status);
 
     /**
      * 根据名称列表查询

@@ -39,16 +39,16 @@ public class UserServiceTest extends BlogApplicationTests{
     public void listUsers() {
     }
 
-    @Test
-    public void listUsersByNameLike() {
-        PageInfo<User> userPageInfo = userService.listUserAndRolesByNameLike("张" , 3 , 2 , 1);
-        logger.info("userPageInfo = {}" ,userPageInfo.toString());
-
-    }
-
-    @Test
-    public void listUsersByUsername() {
-        UserDetails userDetails = userService.loadUserByUsername("zhangsan");
-        System.out.printf(userDetails.toString());
-    }
+//    @Test
+//    public void listUsersByNameLike() {
+//        PageInfo<User> userPageInfo = userService.listUserAndRolesByNameLike("张"  , null, 3 , 2 , 1);
+//        logger.info("userPageInfo = {}" ,userPageInfo.toString());
+//
+//    }
+//
+//    @Test
+//    public void listUsersByUsername() {
+//        UserDetails userDetails = userService.loadUserByUsername("zhangsan");
+//        System.out.printf(userDetails.toString());
+//    }
 }

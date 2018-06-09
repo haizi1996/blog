@@ -23,13 +23,13 @@ public class PageUtil {
         if(page != null){
             pageInfo = PageInfo.of(page.getContent());
             pageInfo.setTotal(page.getTotalElements());
-            pageInfo.setIsLastPage(page.isLast());
-            pageInfo.setIsFirstPage(page.isFirst());
-            pageInfo.setHasNextPage(page.hasNext());
-            pageInfo.setHasPreviousPage(page.hasPrevious());
-            pageInfo.setPageNum(page.getNumber());
+            pageInfo.setPageNum(pageable.getPageNumber() + 1);
             pageInfo.setPageSize(pageable.getPageSize());
-            pageInfo.setPages(page.getTotalPages());
+            pageInfo.setPages((int)(pageInfo.getTotal() + pageable.getPageSize() - 1)/pageable.getPageSize() );
+            pageInfo.setIsLastPage(pageable.getPageNumber() + 1 != pageInfo.getPages());
+            pageInfo.setIsFirstPage(pageable.getPageNumber() + 1 != 1);
+            pageInfo.setHasNextPage(pageable.getPageNumber() + 1 != pageInfo.getPages());
+            pageInfo.setHasPreviousPage(pageable.getPageNumber() + 1 != 1);
         }
         return pageInfo;
     }

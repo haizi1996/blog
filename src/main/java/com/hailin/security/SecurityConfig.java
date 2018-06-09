@@ -18,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.annotation.Resource;
 
 
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfig extends  WebSecurityConfigurerAdapter{
     private static final String KEY = "hailin.com";
@@ -64,8 +64,11 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
                 .and()   //表单等来
                 .authorizeRequests()  //对下面的配置授权
                 .antMatchers("/css/**", "/js/**", "/fonts/**", "/index","/register" , "/login").permitAll() // 都可以访问
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()        //任何请求
-                .authenticated()     //需要认证
+                .authenticated()
+//                .and().rememberMe().key(KEY)
+                .and().exceptionHandling().accessDeniedPage("/index") // 启用 remember me;     //需要认证
                 .and()
                 .csrf().disable() ;//spring Security默认提供csrf跨站伪造url的防护，这里先把它disable掉;
     }

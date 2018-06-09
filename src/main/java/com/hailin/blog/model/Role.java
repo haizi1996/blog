@@ -1,8 +1,10 @@
 package com.hailin.blog.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Date;
 
-public class Role {
+public class Role implements GrantedAuthority {
 
     private int id ;
     private String name ; //'角色名',
@@ -109,5 +111,10 @@ public class Role {
                 ", operateTime=" + operateTime +
                 ", operateIp=" + operateIp +
                 '}';
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
     }
 }

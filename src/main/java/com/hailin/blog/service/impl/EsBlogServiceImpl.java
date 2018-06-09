@@ -189,4 +189,9 @@ public class EsBlogServiceImpl implements EsBlogService {
         }
         return returnList;
     }
+
+    @Override
+    public void removeAll() {
+        esBlogRepository.deleteAll();
+    }
 }

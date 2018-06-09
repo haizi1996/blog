@@ -15,6 +15,7 @@ import com.hailin.blog.trie.WordTree;
 import com.hailin.blog.utils.ConstraintViolationExceptionHandler;
 import com.hailin.blog.utils.SecurityUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")  // 指定角色权限才能操作方法
 public class UserController {
 
 
@@ -44,12 +46,12 @@ public class UserController {
     @ResponseBody
     public ModelAndView listUsers(@RequestParam(value = "async", required = false , defaultValue = "false") boolean async ,
                             @RequestParam(value = "pageIndex" , required = false , defaultValue = "0") Integer pageIndex,
-                            @RequestParam(value = "pageSize" ,required = false , defaultValue = "3") Integer pageSize ,
+                            @RequestParam(value = "pageSize" ,required = false , defaultValue = "10") Integer pageSize ,
                             @RequestParam(value = "name" , required = false , defaultValue = "") String name ,
                             @RequestParam(value = "status" , required = false ,defaultValue = "1") int status,
                             Model model
     ){
-        PageInfo<User> pageInfo = userService.listUserAndRolesByNameLike(name , pageIndex ,pageSize , status);
+        PageInfo<User> pageInfo = userService.listUserAndRolesByNameLike(name ,RoleEnum.BLOGER , pageIndex ,pageSize , status);
         Response response = pageInfo != null ? Response.successResponse(pageInfo) : Response.errorResponse("");
         model.addAttribute("listUserResponse" , response);
         model.addAttribute("page" , pageInfo);
@@ -111,6 +113,7 @@ public class UserController {
                     }
                 }
             }else{
+                user.setPassword(null);
                 userService.updateUser(user);
                 User user1 = userService.getUserById(user.getId());
                 RoleUser roleUser = RoleUser.createRoleUser(user.getId() , RoleEnum.parse(roleId)).setOperateIp(request.getLocalAddr());

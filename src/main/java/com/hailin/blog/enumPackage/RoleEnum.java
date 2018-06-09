@@ -9,8 +9,8 @@ package com.hailin.blog.enumPackage;
 public enum  RoleEnum {
 
 
-    BLOGER(1 , "普通博主"),
-    ADMIN(2 , "管理员");
+    BLOGER(1 , "ROLE_USER"),
+    ADMIN(2 , "ROLE_ADMIN");
     private int roleId ;
 
     private String desc;

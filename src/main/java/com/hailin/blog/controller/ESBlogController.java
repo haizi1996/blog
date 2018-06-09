@@ -32,10 +32,10 @@ public class ESBlogController {
             @RequestParam(value="order",required=false,defaultValue="new") String order,
             @RequestParam(value="keyword",required=false,defaultValue="" ) String keyword,
             @RequestParam(value="async",required=false) boolean async,
-            @RequestParam(value="pageIndex",required=false,defaultValue="0") int pageIndex,
+            @RequestParam(value="pageIndex",required=false,defaultValue="1") int pageIndex,
             @RequestParam(value="pageSize",required=false,defaultValue="10") int pageSize,
             Model model) {
-
+        pageIndex = pageIndex < 1 ? 1 : pageIndex;
         Page<EsBlog> page = null;
         List<EsBlog> list = null;
         // 系统初始化时，没有博客数据
@@ -45,18 +45,18 @@ public class ESBlogController {
             // 最热查询
             if (SortType.HOT.getKey().equals(order)) {
                 Sort sort = new Sort(Sort.Direction.DESC,"readSize","commentSize","voteSize","createTime");
-                pageable = PageRequest.of(pageIndex, pageSize, sort);
+                pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
                 page = esBlogService.listHotestEsBlogs(keyword, pageable);
                 // 最新查询
             } else if (SortType.NEW.getKey().equals(order)) {
                 Sort sort = new Sort(Sort.Direction.DESC,"createTime");
-                pageable = PageRequest.of(pageIndex, pageSize, sort);
+                pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
                 page = esBlogService.listNewestEsBlogs(keyword, pageable);
             }
 
             isEmpty = false;
         } catch (Exception e) {
-            pageable = PageRequest.of(pageIndex, pageSize);
+            pageable = PageRequest.of(pageIndex - 1, pageSize);
             page = esBlogService.listEsBlogs(pageable);
         }
         // 当前所在页面数据列表

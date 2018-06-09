@@ -193,6 +193,12 @@
             <if test="summary != null">
                 summary = #{summary},
             </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="htmlContent != null">
+                html_Content = #{htmlContent},
+            </if>
             <if test="tags != null">
                 tags = #{tags},
             </if>

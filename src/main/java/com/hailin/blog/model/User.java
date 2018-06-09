@@ -1,6 +1,8 @@
 package com.hailin.blog.model;
 
 import com.google.common.collect.Lists;
+import com.hailin.blog.constant.UserConstant;
+import com.hailin.blog.enumPackage.RoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,11 @@ import javax.validation.constraints.Size;
 public class User implements  Serializable,UserDetails {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final long TIMEOUT = 3000;
+	private static final long ONE_DAY_TIME = 1 * 24 * 60 * 60 * 1000;
+
+
 
 	/**
 	 * 用户的唯一标识
@@ -86,7 +93,7 @@ public class User implements  Serializable,UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		return Lists.transform(!CollectionUtils.isEmpty(this.authorities) ? this.authorities : Lists.newArrayList() ,authority -> new SimpleGrantedAuthority(authority.getAuthority()));
+		return Lists.transform(!CollectionUtils.isEmpty(this.roles) ? this.roles : Lists.newArrayList() ,role -> new SimpleGrantedAuthority(RoleEnum.parse(role.getId()).getDesc()));
 	}
 
 	@Override
@@ -202,8 +209,10 @@ public class User implements  Serializable,UserDetails {
 	 */
 	@Override
 	public boolean isAccountNonExpired() {
+//		return System.currentTimeMillis() - lastLoginTime.getTime() < TIMEOUT;
 		return true;
 	}
+
 
 	/**
 	 * 账号是否未冻住  可以恢复
@@ -211,7 +220,8 @@ public class User implements  Serializable,UserDetails {
 	 */
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return status != UserConstant.Status.FROZEN.getCode();
+//		return true;
 	}
 
 	/**
@@ -220,6 +230,7 @@ public class User implements  Serializable,UserDetails {
 	 */
 	@Override
 	public boolean isCredentialsNonExpired() {
+//		return System.currentTimeMillis() - lastModifyPasswordTime.getTime() < ONE_DAY_TIME * 30;
 		return true;
 	}
 

@@ -100,6 +100,8 @@ public class UserspaceController {
 		boolean isMatch = encoder.matches(rawPassword, encodePasswd);
 		if (!isMatch) {
 			originalUser.setEncodePassword(user.getPassword());
+		}else {
+			originalUser.setEncodePassword(null);
 		}
 
 		userService.updateUser(originalUser);
